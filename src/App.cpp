@@ -28,6 +28,12 @@ App::App()
 void App::Begin()
 {
     Serial.begin(115200); 
+
+    Serial.println("==============================");
+    Serial.println(" SCORP Machine Starting      ");
+    Serial.println("==============================");
+
+
     wdt_enable(WDTO_8S);
 
     io_.Begin();
@@ -36,8 +42,9 @@ void App::Begin()
                      
     brushMotor_.Begin();
 
-    Serial.println("\nStart state machine: Done INIT");
-    Serial.println("Press START Button");
+
+
+    Serial.println("[APP] System ready");
 }
 
 void App::Update()

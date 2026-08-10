@@ -2,6 +2,7 @@
 
 #include "IO.h"
 #include "config/PinMap.h"
+#include "Debug.h"
 
 void IO::Begin()
 {
@@ -34,6 +35,15 @@ void IO::Update()
     // Vertical Axis limits
     verticalUpperLimit_ = (digitalRead(Pin::VerticalTopLimit) == LOW);
     verticalLowerLimit_ = (digitalRead(Pin::VerticalBottomLimit) == LOW);
+
+    // if (startPressed_)
+    //     Serial.println("START pressed");
+    // if (stopPressed_)
+    //     Serial.println("STOP pressed");
+    // if (verticalUpperLimit_)
+    //     Serial.println("UPPER Limit pressed");
+    //  if (verticalLowerLimit_)
+    //     Serial.println("BOTTOM Limit pressed");
 
 
 }

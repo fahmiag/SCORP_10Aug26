@@ -1,4 +1,5 @@
 #include "StateMachine.h"
+#include "Debug.h"
 
 StateMachine::StateMachine(
     IO& io,
@@ -140,6 +141,7 @@ void StateMachine::HandleStopping()
     if (!verticalMotor_.IsMoving() &&
         !brushMotor_.IsRunning())
     {
+        DEBUG_PRINTLN("[STATE] IDLE");
         state_ = State::IDLE;
     }
 }
@@ -152,6 +154,8 @@ void StateMachine::HandleStopping()
 void StateMachine::StartMachine()
 {
     state_ = State::RUNNING;
+
+    Serial.println("[STATE] START");
 
     // --------------------------------------------------
     // Start brush
@@ -167,10 +171,12 @@ void StateMachine::StartMachine()
     if (verticalDirection_ == AxisDirection::UP)
     {
         verticalMotor_.MoveUp();
+        Serial.println("Move UP");
     }
     else
     {
         verticalMotor_.MoveDown();
+        Serial.println("Move Down");
     }
 
     verticalMotor_.SetSpeed(180);
@@ -184,6 +190,8 @@ void StateMachine::StartMachine()
 void StateMachine::StopMachine()
 {
     state_ = State::STOPPING;
+    
+    Serial.println("[STATE] STOP");
 
     // Controlled ramp down
     verticalMotor_.Stop();
@@ -206,6 +214,7 @@ void StateMachine::ReverseAxis()
     if (verticalDirection_ == AxisDirection::UP)
     {
         verticalDirection_ = AxisDirection::DOWN;
+        Serial.println("[Motor] Down");
 
         verticalMotor_.MoveDown();
         verticalMotor_.SetSpeed(180);
@@ -213,7 +222,8 @@ void StateMachine::ReverseAxis()
     else
     {
         verticalDirection_ = AxisDirection::UP;
-
+        
+        Serial.println("[Motor] Up");
         verticalMotor_.MoveUp();
         verticalMotor_.SetSpeed(180);
     }
