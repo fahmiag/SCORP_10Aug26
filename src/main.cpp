@@ -8,11 +8,12 @@
  * - Function name -TBA
  * - Variable name - TBA
  * 
- * TODO:
- * [ ] Motor class 
- * [ ] BrushMotor Class, child to Motor class
- * [ ] AxisMotor Class, child to Motor class
- * [ ] Button Class
+ * TODO: 
+ * [x] BrushMotor Class
+ * [x] AxisMotor Class
+ * [x] Button, in IO class
+ * [ ] Check EmergencyStop() code
+ * [ ] Write State Machine Code.
 */
 
 #include <Arduino.h>
@@ -22,7 +23,7 @@ App app;
 
 void setup()
 {
-    app.Initialize();
+    app.Begin();
 
 }
 
