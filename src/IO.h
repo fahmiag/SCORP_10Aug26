@@ -56,6 +56,12 @@ private:
     bool verticalUpperLimit_ = false;
     bool verticalLowerLimit_ = false;
 
+    bool vTopEvent_ = false;
+    bool vBottomEvent_  = false;
+    
+    bool previousVTop_    = false;
+    bool previousVBottom_  = false;
+
     // bool HorizontalUpperLimit_ = false;
     // bool HorizontalLowerLimit_ = false;
 
@@ -67,10 +73,18 @@ private:
     bool rawUp_    = false;
     bool rawDown_  = false;
 
+    
+    bool rawVTop_    = false;
+    bool rawVBottom_  = false;
+
     unsigned long startChangeTime_ = 0;
     unsigned long stopChangeTime_  = 0;
     unsigned long upChangeTime_    = 0;
     unsigned long downChangeTime_  = 0;
+
+    
+    unsigned long vTopChangeTime_    = 0;
+    unsigned long vBottomChangeTime_  = 0;
 
     void UpdateButton(
         bool rawState,

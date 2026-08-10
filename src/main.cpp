@@ -13,9 +13,11 @@
  * [x] AxisMotor Class
  * [x] Button, in IO class
  * [x] Write State Machine Code.
- * [ ] Button and limit Serial print
- * [ ] Serial Print Motor Speed
- * [ ] Check Motor Slowdown during direction change
+ * [x] Button and limit Serial print
+ * [x] Serial Print Motor Speed
+ * [ ] Check brush Motor Speed
+ * [x] Check Motor Slowdown during direction change
+ * [ ] Stop for a while during direction change
  * [ ] Check EmergencyStop() code
  * [ ] Emergency Stop, Stop all motor immediately
  * [ ] Add timeout, fault
@@ -26,7 +28,7 @@
  * [ ] Save count data in EEPROM
  * [ ] Send count data to RasPI
  * [ ] Write Debug function
- * 
+ * [ ] Remove Magic number
  */
 
 #include <Arduino.h>

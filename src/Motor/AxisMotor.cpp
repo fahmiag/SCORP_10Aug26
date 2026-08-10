@@ -1,4 +1,5 @@
 #include "AxisMotor.h"
+#include "Debug.h"
 
 AxisMotor::AxisMotor(
     uint8_t pwmPin,
@@ -12,7 +13,7 @@ AxisMotor::AxisMotor(
       direction_(Direction::STOP),
       currentSpeed_(0),
       targetSpeed_(0),
-      rampRate_(5),
+      rampRate_(20),
       lastUpdateTime_(0)
 {
 }
@@ -69,6 +70,9 @@ void AxisMotor::Update()
             newSpeed = targetSpeed_;
 
         currentSpeed_ = newSpeed;
+        
+        // DEBUG_PRINT("VMotor");
+        // DEBUG_PRINTLN (currentSpeed_);
     }
     else if (currentSpeed_ > targetSpeed_)
     {
@@ -78,6 +82,9 @@ void AxisMotor::Update()
             newSpeed = targetSpeed_;
 
         currentSpeed_ = newSpeed;
+        
+        // DEBUG_PRINT("VMotor");
+        // DEBUG_PRINTLN (currentSpeed_);
     }
 
     ApplyOutput();

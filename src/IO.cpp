@@ -30,11 +30,17 @@ void IO::Begin()
     upChangeTime_    = now;
     downChangeTime_  = now;
 
+    vTopChangeTime_    = now;
+    vBottomChangeTime_  = now;
+
     // Initialize button states
     rawStart_ = (digitalRead(Pin::BUTTON_START) == LOW);
     rawStop_  = (digitalRead(Pin::BUTTON_STOP)  == LOW);
    // rawUp_    = (digitalRead(Pin::BUTTON_UP)    == LOW);
    // rawDown_  = (digitalRead(Pin::BUTTON_DOWN)  == LOW);
+   
+    rawVTop_ = (digitalRead(Pin::VerticalTopLimit) == LOW);
+    rawVBottom_  = (digitalRead(Pin::VerticalBottomLimit)  == LOW);
 
     startPressed_ = rawStart_;
     stopPressed_  = rawStop_;
@@ -45,19 +51,24 @@ void IO::Begin()
     previousStop_  = stopPressed_;
    // previousUp_    = upPressed_;
    // previousDown_  = downPressed_;
+   previousVTop_  = verticalUpperLimit_;
+   previousVBottom_  = verticalLowerLimit_;
 
     // No events generated during startup
     startEvent_ = false;
     stopEvent_  = false;
    // upEvent_    = false;
    // downEvent_  = false;
+    vTopEvent_ = false;
+    vBottomEvent_  = false;
+
 
     Update();
 }
 
 void IO::Update()
 {
-        unsigned long now = millis();
+    unsigned long now = millis();
 
     // Events are generated during this Update()
     // and consumed by StartEvent(), StopEvent(), etc.
@@ -65,6 +76,9 @@ void IO::Update()
     stopEvent_  = false;
     upEvent_    = false;
     downEvent_  = false;
+    vTopEvent_ = false;
+    vBottomEvent_  = false;
+    
 
       // --------------------------------------------------
     // Read raw button states
@@ -79,8 +93,9 @@ void IO::Update()
     //downPressed_  = (digitalRead(PIN_BUTTON_DOWN)  == LOW);
 
     // Vertical Axis limits
-    verticalUpperLimit_ = (digitalRead(Pin::VerticalTopLimit) == LOW);
-    verticalLowerLimit_ = (digitalRead(Pin::VerticalBottomLimit) == LOW);
+    bool rawVTop    = (digitalRead(Pin::VerticalTopLimit) == LOW);
+    bool rawVBottom  = (digitalRead(Pin::VerticalBottomLimit) == LOW);
+
 
     // if (startPressed_)
     //     Serial.println("START pressed");
@@ -110,6 +125,20 @@ void IO::Update()
         stopChangeTime_
     );
 
+    UpdateButton(
+        rawVTop,
+        rawVTop_,
+        verticalUpperLimit_,
+        stopChangeTime_
+    );
+
+    UpdateButton(
+        rawVBottom,
+        rawVBottom_,
+        verticalLowerLimit_,
+        stopChangeTime_
+    );
+
         // --------------------------------------------------
     // Generate press events
     //
@@ -121,13 +150,25 @@ void IO::Update()
     if (startPressed_ && !previousStart_)
     {
         startEvent_ = true;
-        DEBUG_PRINTLN("START BUTTON");
+        DEBUG_PRINTLN("[BUTTON] START");
     }
 
     if (stopPressed_ && !previousStop_)
     {
         stopEvent_ = true;
-        DEBUG_PRINTLN("START BUTTON");
+        DEBUG_PRINTLN("[BUTTON] STOP");
+    }
+
+    if (verticalUpperLimit_ && !previousVTop_)
+    {
+        vTopEvent_ = true;
+        DEBUG_PRINTLN("[SW] Top Limit");
+    }
+
+    if (verticalLowerLimit_ && !previousVBottom_)
+    {
+        vBottomEvent_ = true;
+        DEBUG_PRINTLN("[SW] Bottom Limit");
     }
 
         // --------------------------------------------------
@@ -136,6 +177,9 @@ void IO::Update()
 
     previousStart_ = startPressed_;
     previousStop_  = stopPressed_;
+
+    previousVTop_ = verticalUpperLimit_;
+    previousVBottom_ = verticalLowerLimit_;
 
 
 }

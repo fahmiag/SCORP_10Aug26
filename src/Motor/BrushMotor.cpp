@@ -1,4 +1,5 @@
 #include "BrushMotor.h"
+#include "Debug.h"
 
 BrushMotor::BrushMotor(uint8_t pwmPin, uint8_t dirPin)
     : pwmPin_(pwmPin),
@@ -6,7 +7,7 @@ BrushMotor::BrushMotor(uint8_t pwmPin, uint8_t dirPin)
       direction_(Direction::STOP),
       currentSpeed_(0),
       targetSpeed_(0),
-      rampRate_(5),
+      rampRate_(20), //5
       lastUpdateTime_(0)
 {
 }
@@ -43,6 +44,9 @@ void BrushMotor::Update()
             newSpeed = targetSpeed_;
 
         currentSpeed_ = newSpeed;
+        
+        // DEBUG_PRINT("Brush");
+        // DEBUG_PRINTLN (currentSpeed_);
     }
 
     // Decelerate
@@ -54,6 +58,8 @@ void BrushMotor::Update()
             newSpeed = targetSpeed_;
 
         currentSpeed_ = newSpeed;
+        // DEBUG_PRINT("Brush");
+        // DEBUG_PRINTLN (currentSpeed_);
     }
 
     ApplyOutput();
