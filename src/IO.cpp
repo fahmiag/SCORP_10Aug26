@@ -21,14 +21,60 @@ void IO::Begin()
    // pinMode(PIN_AXIS2_DN_LIMIT, INPUT_PULLUP);
 
     // Read initial state
+
+        // Initialize timing
+    unsigned long now = millis();
+
+    startChangeTime_ = now;
+    stopChangeTime_  = now;
+    upChangeTime_    = now;
+    downChangeTime_  = now;
+
+    // Initialize button states
+    rawStart_ = (digitalRead(Pin::BUTTON_START) == LOW);
+    rawStop_  = (digitalRead(Pin::BUTTON_STOP)  == LOW);
+   // rawUp_    = (digitalRead(Pin::BUTTON_UP)    == LOW);
+   // rawDown_  = (digitalRead(Pin::BUTTON_DOWN)  == LOW);
+
+    startPressed_ = rawStart_;
+    stopPressed_  = rawStop_;
+    //upPressed_    = rawUp_;
+   // downPressed_  = rawDown_;
+
+    previousStart_ = startPressed_;
+    previousStop_  = stopPressed_;
+   // previousUp_    = upPressed_;
+   // previousDown_  = downPressed_;
+
+    // No events generated during startup
+    startEvent_ = false;
+    stopEvent_  = false;
+   // upEvent_    = false;
+   // downEvent_  = false;
+
     Update();
 }
 
 void IO::Update()
 {
-    // Buttons
-    startPressed_ = (digitalRead(Pin::BUTTON_START) == LOW);
-    stopPressed_  = (digitalRead(Pin::BUTTON_STOP)  == LOW);
+        unsigned long now = millis();
+
+    // Events are generated during this Update()
+    // and consumed by StartEvent(), StopEvent(), etc.
+    startEvent_ = false;
+    stopEvent_  = false;
+    upEvent_    = false;
+    downEvent_  = false;
+
+      // --------------------------------------------------
+    // Read raw button states
+    // INPUT_PULLUP:
+    // LOW  = pressed
+    // HIGH = released
+    // --------------------------------------------------
+
+    bool rawStart= (digitalRead(Pin::BUTTON_START) == LOW);
+    bool rawStop  = (digitalRead(Pin::BUTTON_STOP)  == LOW);
     //upPressed_    = (digitalRead(PIN_BUTTON_UP)    == LOW);
     //downPressed_  = (digitalRead(PIN_BUTTON_DOWN)  == LOW);
 
@@ -46,7 +92,80 @@ void IO::Update()
     //     Serial.println("BOTTOM Limit pressed");
 
 
+    // --------------------------------------------------
+    // Debounce buttons
+    // --------------------------------------------------
+
+    UpdateButton(
+        rawStart,
+        rawStart_,
+        startPressed_,
+        startChangeTime_
+    );
+
+    UpdateButton(
+        rawStop,
+        rawStop_,
+        stopPressed_,
+        stopChangeTime_
+    );
+
+        // --------------------------------------------------
+    // Generate press events
+    //
+    // Event occurs only on:
+    //
+    // false -> true
+    // --------------------------------------------------
+
+    if (startPressed_ && !previousStart_)
+    {
+        startEvent_ = true;
+        DEBUG_PRINTLN("START BUTTON");
+    }
+
+    if (stopPressed_ && !previousStop_)
+    {
+        stopEvent_ = true;
+        DEBUG_PRINTLN("START BUTTON");
+    }
+
+        // --------------------------------------------------
+    // Save current state for next update
+    // --------------------------------------------------
+
+    previousStart_ = startPressed_;
+    previousStop_  = stopPressed_;
+
+
 }
+
+// ======================================================
+// Button debounce
+// ======================================================
+
+void IO::UpdateButton(
+    bool rawState,
+    bool& rawStateStorage,
+    bool& stableState,
+    unsigned long& changeTime)
+{
+    unsigned long now = millis();
+
+    // Raw input changed
+    if (rawState != rawStateStorage)
+    {
+        rawStateStorage = rawState;
+        changeTime = now;
+    }
+
+    // Raw input has remained unchanged long enough
+    if ((now - changeTime) >= DEBOUNCE_TIME_MS)
+    {
+        stableState = rawStateStorage;
+    }
+}
+
 
 // --------------------------------------------------
 // Buttons
@@ -70,6 +189,25 @@ bool IO::UpPressed() const
 bool IO::DownPressed() const
 {
     return downPressed_;
+}
+// ======================================================
+// Button events
+// ======================================================
+
+bool IO::StartEvent()
+{
+    bool event = startEvent_;
+    startEvent_ = false;
+
+    return event;
+}
+
+bool IO::StopEvent()
+{
+    bool event = stopEvent_;
+    stopEvent_ = false;
+
+    return event;
 }
 
 // --------------------------------------------------
