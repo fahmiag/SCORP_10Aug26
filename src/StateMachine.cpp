@@ -10,9 +10,9 @@ StateMachine::StateMachine(
       verticalMotor_(axisMotor1),
       state_(State::IDLE),
       verticalDirection_(AxisDirection::UP),
-      //previousStart_(false),
-      //previousStop_(false)
-      reverseStartTime_(0)
+      reverseStartTime_(0),
+      cycleCount_(0),
+      cycleUpCompleted_(false)
 {
 }
 
@@ -25,12 +25,15 @@ void StateMachine::Begin()
 
     reverseStartTime_ = 0;
 
-    // previousStart_ = false;
-    // previousStop_ = false;
+
+    cycleCount_ = 0;
+    cycleUpCompleted_ = false;
 
     brushMotor_.Stop();
     verticalMotor_.Stop();
+
     DEBUG_PRINTLN("[STATE] IDLE");
+    DEBUG_PRINTLN("[CYCLE] Counter = 0");
 }
 
 void StateMachine::Update()
@@ -93,6 +96,7 @@ void StateMachine::HandleRunning()
     {
         if (verticalMotor_.IsAtUpperLimit())
         {
+            cycleUpCompleted_ = true;
             // Ramp motor down to zero first
             DEBUG_PRINTLN("[AXIS1] TOP LIMIT");
             //verticalMotor_.Stop();
@@ -104,7 +108,16 @@ void StateMachine::HandleRunning()
     else
     {
         if (verticalMotor_.IsAtLowerLimit())
-        {
+        {       
+            if (cycleUpCompleted_)
+            {
+                cycleCount_++;
+
+                cycleUpCompleted_ = false;
+
+                DEBUG_PRINT("[CYCLE] Count = ");
+                DEBUG_PRINTLN(cycleCount_);
+            }
             // Ramp motor down to zero first
             //verticalMotor_.Stop();
             DEBUG_PRINTLN("[AXIS1] TOP LIMIT");
@@ -273,59 +286,15 @@ void StateMachine::StopMachine()
     // pressing START again will resume UP.
 }
 
+uint32_t StateMachine::GetCycleCount() const
+{
+    return cycleCount_;
+}
 
-// ======================================================
-// REVERSE AXIS
-// ======================================================
+void StateMachine::ResetCycleCount()
+{
+    cycleCount_ = 0;
+    cycleUpCompleted_ = false;
 
-// void StateMachine::ReverseAxis()
-// {
-//     if (verticalDirection_ == AxisDirection::UP)
-//     {
-//         verticalDirection_ = AxisDirection::DOWN;
-//         Serial.println("[Motor] Down");
-
-//         verticalMotor_.MoveDown();
-//         verticalMotor_.SetSpeed(180);
-//     }
-//     else
-//     {
-//         verticalDirection_ = AxisDirection::UP;
-        
-//         Serial.println("[Motor] Up");
-//         verticalMotor_.MoveUp();
-//         verticalMotor_.SetSpeed(180);
-//     }
-// }
-
-
-// ======================================================
-// START BUTTON EDGE DETECTION
-// ======================================================
-
-// bool StateMachine::StartPressedEvent()
-// {
-//     bool current = io_.StartPressed();
-
-//     bool event = current && !previousStart_;
-
-//     previousStart_ = current;
-
-//     return event;
-// }
-
-
-// // ======================================================
-// // STOP BUTTON EDGE DETECTION
-// // ======================================================
-
-// bool StateMachine::StopPressedEvent()
-// {
-//     bool current = io_.StopPressed();
-
-//     bool event = current && !previousStop_;
-
-//     previousStop_ = current;
-
-//     return event;
-// }
+    DEBUG_PRINTLN("[CYCLE] Counter reset");
+}

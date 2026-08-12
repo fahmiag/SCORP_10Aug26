@@ -18,6 +18,9 @@ public:
     void Begin();
     void Update();
 
+    uint32_t GetCycleCount() const;
+    void ResetCycleCount();
+
 private:
 
     enum class State
@@ -47,6 +50,10 @@ private:
     // Used for button edge detection
     bool previousStart_;
     bool previousStop_;
+
+    // Cycle counter
+    uint32_t cycleCount_;
+    bool cycleUpCompleted_;
 
     void HandleIdle();
     void HandleRunning();
