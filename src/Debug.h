@@ -25,8 +25,10 @@
 
 #if DEBUG_MOTOR
     #define DEBUG_MOTOR_PRINTLN(x) Serial.println(x)
+    #define DEBUG_MOTOR_PRINT(x) Serial.print(x)
 #else
     #define DEBUG_MOTOR_PRINTLN(x)
+    #define DEBUG_MOTOR_PRINT(x)
 #endif
 
 #if DEBUG_IO

@@ -15,7 +15,7 @@
  * [x] Write State Machine Code.
  * [x] Button and limit Serial print
  * [x] Serial Print Motor Speed
- * [ ] Check brush Motor Speed
+ * [x] Check brush Motor Speed
  * [x] Check Motor Slowdown during direction change
  * [ ] Stop for a while during direction change
  * [ ] Check EmergencyStop() code

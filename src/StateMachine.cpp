@@ -10,8 +10,9 @@ StateMachine::StateMachine(
       verticalMotor_(axisMotor1),
       state_(State::IDLE),
       verticalDirection_(AxisDirection::UP),
-      previousStart_(false),
-      previousStop_(false)
+      //previousStart_(false),
+      //previousStop_(false)
+      reverseStartTime_(0)
 {
 }
 
@@ -22,11 +23,14 @@ void StateMachine::Begin()
     // First movement direction
     verticalDirection_ = AxisDirection::UP;
 
-    previousStart_ = false;
-    previousStop_ = false;
+    reverseStartTime_ = 0;
+
+    // previousStart_ = false;
+    // previousStop_ = false;
 
     brushMotor_.Stop();
     verticalMotor_.Stop();
+    DEBUG_PRINTLN("[STATE] IDLE");
 }
 
 void StateMachine::Update()
@@ -39,6 +43,10 @@ void StateMachine::Update()
 
         case State::RUNNING:
             HandleRunning();
+            break;
+
+        case State::WAITING_TO_REVERSE:
+            HandleWaitingToReverse();
             break;
 
         case State::STOPPING:
@@ -54,7 +62,7 @@ void StateMachine::Update()
 
 void StateMachine::HandleIdle()
 {
-    if (StartPressedEvent())
+    if (io_.StartEvent())
     {
         StartMachine();
     }
@@ -71,7 +79,7 @@ void StateMachine::HandleRunning()
     // STOP button
     // ----------------------------------------------
 
-    if (StopPressedEvent())
+    if (io_.StopEvent())
     {
         StopMachine();
         return;
@@ -86,7 +94,9 @@ void StateMachine::HandleRunning()
         if (verticalMotor_.IsAtUpperLimit())
         {
             // Ramp motor down to zero first
-            verticalMotor_.Stop();
+            DEBUG_PRINTLN("[AXIS1] TOP LIMIT");
+            //verticalMotor_.Stop();
+            StartReverseDelay();
 
             // We will reverse once the motor has stopped
         }
@@ -96,7 +106,9 @@ void StateMachine::HandleRunning()
         if (verticalMotor_.IsAtLowerLimit())
         {
             // Ramp motor down to zero first
-            verticalMotor_.Stop();
+            //verticalMotor_.Stop();
+            DEBUG_PRINTLN("[AXIS1] TOP LIMIT");
+            StartReverseDelay();
 
             // We will reverse once the motor has stopped
         }
@@ -128,6 +140,63 @@ void StateMachine::HandleRunning()
     }
 }
 
+void StateMachine::StartReverseDelay()
+{
+    // Ramp axis down to zero
+    verticalMotor_.Stop();
+
+    // Record when the delay started
+    reverseStartTime_ = millis();
+
+    state_ = State::WAITING_TO_REVERSE;
+
+    DEBUG_PRINTLN("[AXIS1] Stopping before reverse");
+    DEBUG_PRINTLN("[STATE] WAITING_TO_REVERSE");
+}
+
+void StateMachine::HandleWaitingToReverse()
+{
+    // STOP should still work during the delay
+    if (io_.StopEvent())
+    {
+        StopMachine();
+        return;
+    }
+
+    unsigned long elapsed =
+        millis() - reverseStartTime_;
+
+    if (elapsed >= REVERSE_DELAY_MS)
+    {
+        ReverseAxis();
+    }
+}
+
+void StateMachine::ReverseAxis()
+{
+    if (verticalDirection_ == AxisDirection::UP)
+    {
+        verticalDirection_ = AxisDirection::DOWN;
+
+        DEBUG_PRINTLN("[AXIS1] Reversing DOWN");
+
+        verticalMotor_.MoveDown();
+    }
+    else
+    {
+        verticalDirection_ = AxisDirection::UP;
+
+        DEBUG_PRINTLN("[AXIS1] Reversing UP");
+
+        verticalMotor_.MoveUp();
+    }
+
+    verticalMotor_.SetSpeed(180);
+
+    state_ = State::RUNNING;
+
+    DEBUG_PRINTLN("[STATE] RUNNING");
+}
 
 // ======================================================
 // STOPPING
@@ -209,54 +278,54 @@ void StateMachine::StopMachine()
 // REVERSE AXIS
 // ======================================================
 
-void StateMachine::ReverseAxis()
-{
-    if (verticalDirection_ == AxisDirection::UP)
-    {
-        verticalDirection_ = AxisDirection::DOWN;
-        Serial.println("[Motor] Down");
+// void StateMachine::ReverseAxis()
+// {
+//     if (verticalDirection_ == AxisDirection::UP)
+//     {
+//         verticalDirection_ = AxisDirection::DOWN;
+//         Serial.println("[Motor] Down");
 
-        verticalMotor_.MoveDown();
-        verticalMotor_.SetSpeed(180);
-    }
-    else
-    {
-        verticalDirection_ = AxisDirection::UP;
+//         verticalMotor_.MoveDown();
+//         verticalMotor_.SetSpeed(180);
+//     }
+//     else
+//     {
+//         verticalDirection_ = AxisDirection::UP;
         
-        Serial.println("[Motor] Up");
-        verticalMotor_.MoveUp();
-        verticalMotor_.SetSpeed(180);
-    }
-}
+//         Serial.println("[Motor] Up");
+//         verticalMotor_.MoveUp();
+//         verticalMotor_.SetSpeed(180);
+//     }
+// }
 
 
 // ======================================================
 // START BUTTON EDGE DETECTION
 // ======================================================
 
-bool StateMachine::StartPressedEvent()
-{
-    bool current = io_.StartPressed();
+// bool StateMachine::StartPressedEvent()
+// {
+//     bool current = io_.StartPressed();
 
-    bool event = current && !previousStart_;
+//     bool event = current && !previousStart_;
 
-    previousStart_ = current;
+//     previousStart_ = current;
 
-    return event;
-}
+//     return event;
+// }
 
 
-// ======================================================
-// STOP BUTTON EDGE DETECTION
-// ======================================================
+// // ======================================================
+// // STOP BUTTON EDGE DETECTION
+// // ======================================================
 
-bool StateMachine::StopPressedEvent()
-{
-    bool current = io_.StopPressed();
+// bool StateMachine::StopPressedEvent()
+// {
+//     bool current = io_.StopPressed();
 
-    bool event = current && !previousStop_;
+//     bool event = current && !previousStop_;
 
-    previousStop_ = current;
+//     previousStop_ = current;
 
-    return event;
-}
+//     return event;
+// }

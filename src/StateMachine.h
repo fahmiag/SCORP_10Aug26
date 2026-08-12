@@ -24,6 +24,7 @@ private:
     {
         IDLE,
         RUNNING,
+        WAITING_TO_REVERSE,
         STOPPING
     };
 
@@ -40,12 +41,16 @@ private:
     State state_;
     AxisDirection verticalDirection_;
 
+    unsigned long reverseStartTime_;
+    static constexpr unsigned long REVERSE_DELAY_MS = 2000;
+
     // Used for button edge detection
     bool previousStart_;
     bool previousStop_;
 
     void HandleIdle();
     void HandleRunning();
+    void HandleWaitingToReverse();
     void HandleStopping();
 
     void StartMachine();
@@ -53,6 +58,8 @@ private:
 
     void ReverseAxis();
 
-    bool StartPressedEvent();
-    bool StopPressedEvent();
+    void StartReverseDelay();
+
+    //bool StartPressedEvent();
+    //bool StopPressedEvent();
 };

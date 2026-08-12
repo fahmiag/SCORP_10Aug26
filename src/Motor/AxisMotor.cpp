@@ -71,8 +71,8 @@ void AxisMotor::Update()
 
         currentSpeed_ = newSpeed;
         
-        // DEBUG_PRINT("VMotor");
-        // DEBUG_PRINTLN (currentSpeed_);
+        DEBUG_MOTOR_PRINT("VMotor");
+        DEBUG_MOTOR_PRINTLN (currentSpeed_);
     }
     else if (currentSpeed_ > targetSpeed_)
     {
@@ -83,8 +83,8 @@ void AxisMotor::Update()
 
         currentSpeed_ = newSpeed;
         
-        // DEBUG_PRINT("VMotor");
-        // DEBUG_PRINTLN (currentSpeed_);
+        DEBUG_MOTOR_PRINT("VMotor");
+        DEBUG_MOTOR_PRINTLN (currentSpeed_);
     }
 
     ApplyOutput();
