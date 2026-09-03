@@ -25,6 +25,8 @@ App::App()
           verticalMotor_)
 {
 }
+
+
 void App::Begin()
 {
     Serial.begin(115200); 

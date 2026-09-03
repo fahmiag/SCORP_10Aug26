@@ -9,19 +9,19 @@ This file contains only pin definitions.
 namespace Pin
 {
     //Vertical Motor
-    constexpr uint8_t VerticalMotorPWM {9};
+    constexpr uint8_t VerticalMotorPWM {10};
     constexpr uint8_t VerticalMotorDir {8};
 
-    constexpr uint8_t VerticalTopLimit {4};
-    constexpr uint8_t VerticalBottomLimit {5}; 
+    constexpr uint8_t VerticalTopLimit {5};
+    constexpr uint8_t VerticalBottomLimit {4}; 
 
     //Brush motor
-    constexpr uint8_t BrushPWM {10};
-    constexpr uint8_t BrushDir {11};
+    constexpr uint8_t BrushPWM {11};
+    constexpr uint8_t BrushDir {9};
 
     //Button
-    constexpr uint8_t BUTTON_START {2};
-    constexpr uint8_t BUTTON_STOP {3};
+    constexpr uint8_t BUTTON_START {A0};
+    constexpr uint8_t BUTTON_STOP {A1};
 
     //Horizontal Motor
     // constexpr uint8_t HorizontalMotorPWM {8};

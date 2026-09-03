@@ -124,8 +124,8 @@ void BrushMotor::ApplyOutput()
             digitalWrite(dirPin_, LOW);
             break;
 
-        case Direction::STOP:  //TODO: Slow down when stop
-            analogWrite(pwmPin_, 0);
+        case Direction::STOP:  
+            //analogWrite(pwmPin_, 0);
             return;
     }
 

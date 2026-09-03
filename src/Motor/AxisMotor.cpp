@@ -13,7 +13,7 @@ AxisMotor::AxisMotor(
       direction_(Direction::STOP),
       currentSpeed_(0),
       targetSpeed_(0),
-      rampRate_(20),
+      rampRate_(255),
       lastUpdateTime_(0)
 {
 }
@@ -39,25 +39,24 @@ void AxisMotor::Update()
 {
     unsigned long now = millis();
 
-    if (now - lastUpdateTime_ < 10)
-        return;
-
-    lastUpdateTime_ = now;
-
     // --------------------------------------------------
     // Check limit switches
     // --------------------------------------------------
 
     if (direction_ == Direction::UP && IsAtUpperLimit())
     {
-        Stop();
+        EmergencyStop();
     }
 
     if (direction_ == Direction::DOWN && IsAtLowerLimit())
     {
-        Stop();
+        EmergencyStop();
     }
 
+    if (now - lastUpdateTime_ < 10)
+        return;
+
+    lastUpdateTime_ = now;
     // --------------------------------------------------
     // Speed ramp
     // --------------------------------------------------
@@ -166,16 +165,17 @@ void AxisMotor::ApplyOutput()
     // --------------------------------------------------
     // Safety: prevent movement into active limit
     // --------------------------------------------------
+    //TODO: Check is this prevent controlled deceleration?
 
-    if (direction_ == Direction::UP && IsAtUpperLimit())
+    if (direction_ == Direction::UP && IsAtUpperLimit())  
     {
-        analogWrite(pwmPin_, 0);
+        //analogWrite(pwmPin_, 0);
         return;
     }
 
     if (direction_ == Direction::DOWN && IsAtLowerLimit())
     {
-        analogWrite(pwmPin_, 0);
+        //analogWrite(pwmPin_, 0);
         return;
     }
 
@@ -190,7 +190,7 @@ void AxisMotor::ApplyOutput()
             break;
 
         case Direction::STOP:
-            analogWrite(pwmPin_, 0);  //TODO: Check this part, maybe need to remove
+           // analogWrite(pwmPin_, 0);  //TODO: Check this part, maybe need to remove
             return;
     }
 

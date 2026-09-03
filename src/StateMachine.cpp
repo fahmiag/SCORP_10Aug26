@@ -22,6 +22,7 @@ void StateMachine::Begin()
 
     // First movement direction
     verticalDirection_ = AxisDirection::UP;
+    // TODO: Add homing function. or manual control
 
     reverseStartTime_ = 0;
 
