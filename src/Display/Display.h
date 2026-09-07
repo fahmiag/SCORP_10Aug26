@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
 #include "../StateMachine.h"
+#include "../Motor/AxisMotor.h"
 
 class Display
 {
@@ -15,7 +16,10 @@ public:
 
     bool Begin();
 
-    void Update(StateMachine::State state);
+    void Update(
+        StateMachine::State state,
+        AxisMotor::Direction axisDirection
+    );
 
     void Clear();
 
@@ -45,5 +49,11 @@ private:
     uint8_t rows_;
     bool initialized_;
 
-     StateMachine::State previousState_;
+    StateMachine::State previousState_;
+
+    AxisMotor::Direction previousDirection_;
+
+    unsigned long lastUpdateTime_;
+
+    static constexpr unsigned long UPDATE_INTERVAL_MS = 1000;
 };

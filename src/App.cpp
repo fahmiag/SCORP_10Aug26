@@ -66,13 +66,11 @@ void App::Update()
     brushMotor_.Update();
     verticalMotor_.Update();
 
-    display_.Update(stateMachine_.GetState());
+    display_.Update(
+        stateMachine_.GetState(),
+        verticalMotor_.GetDirection()
+    );
 
-
-   
-   
-   
-   
     wdt_reset();
  
     

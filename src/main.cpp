@@ -18,8 +18,8 @@
  * [x] Check brush Motor Speed
  * [x] Check Motor Slowdown during direction change
  * [x] Stop for a while during direction change
- * [ ] Check EmergencyStop() code
- * [ ] Emergency Stop, Stop all motor immediately
+ * [x] Check EmergencyStop() code
+ * [x] Emergency Stop, Stop all motor immediately
  * [ ] Add timeout, fault
  * [x] Add count
  * [ ] Test the code with actual motor driver and DC motor

@@ -13,6 +13,13 @@ public:
         uint8_t lowerLimitPin
     );
 
+    enum class Direction
+    {
+        STOP,
+        UP,
+        DOWN
+    };
+
     void Begin();
     void Update();
 
@@ -32,13 +39,10 @@ public:
     uint8_t GetCurrentSpeed() const;
     uint8_t GetTargetSpeed() const;
 
+    Direction GetDirection() const;
+
 private:
-    enum class Direction
-    {
-        STOP,
-        UP,
-        DOWN
-    };
+
 
     uint8_t pwmPin_;
     uint8_t dirPin_;

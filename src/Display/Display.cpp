@@ -9,7 +9,9 @@ Display::Display(
       columns_(columns),
       rows_(rows),
       initialized_(false),
-      previousState_(StateMachine::State::FAULT)
+      previousState_(StateMachine::State::FAULT),
+      previousDirection_(AxisMotor::Direction::STOP),
+      lastUpdateTime_(0)
 {
 }
 
@@ -97,16 +99,45 @@ void Display::SetBacklight(bool enabled)
     }
 }
 
-void Display::Update(StateMachine::State state)
+void Display::Update(
+    StateMachine::State state,
+    AxisMotor::Direction axisDirection
+)
 {
     if (!initialized_)
         return;
 
-    // Nothing changed, so don't update LCD
-    if (state == previousState_)
-        return;
+    const unsigned long now = millis();
 
+    const bool stateChanged =
+        state != previousState_;
+
+    const bool directionChanged =
+        axisDirection != previousDirection_;
+
+    const bool periodicUpdate =
+        (now - lastUpdateTime_) >= UPDATE_INTERVAL_MS;
+
+        // No changes and 1 second hasn't passed
+
+    // if (!stateChanged &&
+    //     !directionChanged &&
+    //     !periodicUpdate)
+
+    if (!stateChanged &&
+        !directionChanged)
+    {
+        return;
+    }
+
+    // Remember latest values
     previousState_ = state;
+    previousDirection_ = axisDirection;
+    lastUpdateTime_ = now;
+
+    // -------------------------
+    // State
+    // -------------------------
 
     switch (state)
     {
@@ -117,9 +148,32 @@ void Display::Update(StateMachine::State state)
         case StateMachine::State::RUNNING:
             PrintLine(1, "State: RUNNING");
             break;
+        
+        case StateMachine::State::WAITING_TO_REVERSE:
+            PrintLine(1, "State: REVERSE");
+            break;
+        
+        case StateMachine::State::STOPPING:
+            PrintLine(1, "State: STOPPING");
+            break;
 
         case StateMachine::State::FAULT:
             PrintLine(1, "State: FAULT");
+            break;
+    }
+
+    switch (axisDirection)
+    {
+        case AxisMotor::Direction::UP:
+            PrintLine(2, "Move : UP");
+            break;
+
+        case AxisMotor::Direction::DOWN:
+            PrintLine(2, "Move : DOWN");
+            break;
+
+        case AxisMotor::Direction::STOP:
+            PrintLine(2, "Move : STOP");
             break;
     }
 }

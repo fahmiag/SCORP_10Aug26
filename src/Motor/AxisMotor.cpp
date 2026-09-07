@@ -13,7 +13,7 @@ AxisMotor::AxisMotor(
       direction_(Direction::STOP),
       currentSpeed_(0),
       targetSpeed_(0),
-      rampRate_(255),
+      rampRate_(51),
       lastUpdateTime_(0)
 {
 }
@@ -198,3 +198,11 @@ void AxisMotor::ApplyOutput()
 }
 
 //TODO: add EmergencyStop()
+
+AxisMotor::Direction AxisMotor::GetDirection() const
+{
+    if (!IsMoving())
+        return Direction::STOP;
+
+    return direction_;
+}
