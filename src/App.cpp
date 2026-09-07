@@ -22,7 +22,9 @@ App::App()
       stateMachine_(
           io_,
           brushMotor_,
-          verticalMotor_)
+          verticalMotor_),
+
+      display_(0x27, 20, 4)
 {
 }
 
@@ -44,6 +46,11 @@ void App::Begin()
                      
     brushMotor_.Begin();
 
+    display_.Begin();
+
+    display_.PrintLine(0, "SCORP Robot");
+    display_.PrintLine(1, "State: IDLE");
+
 
 
     Serial.println("[APP] System ready");
@@ -59,10 +66,14 @@ void App::Update()
     brushMotor_.Update();
     verticalMotor_.Update();
 
+    display_.Update(stateMachine_.GetState());
 
+
+   
+   
+   
    
     wdt_reset();
  
-
     
 }

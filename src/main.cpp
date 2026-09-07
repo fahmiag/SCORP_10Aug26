@@ -34,6 +34,8 @@
 #include <Arduino.h>
 #include "App.h"
 
+LiquidCrystal_I2C lcd(0x27,20,4);  
+
 App app;
 
 void setup()

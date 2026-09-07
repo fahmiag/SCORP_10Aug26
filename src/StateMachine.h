@@ -18,17 +18,13 @@ public:
     void Begin();
     void Update();
 
-    uint32_t GetCycleCount() const;
-    void ResetCycleCount();
-
-private:
-
     enum class State
     {
         IDLE,
         RUNNING,
         WAITING_TO_REVERSE,
-        STOPPING
+        STOPPING,
+        FAULT
     };
 
     enum class AxisDirection
@@ -36,6 +32,18 @@ private:
         UP,
         DOWN
     };
+
+
+
+    State GetState() const;
+
+    uint32_t GetCycleCount() const;
+    void ResetCycleCount();
+
+
+private:
+
+
 
     IO& io_;
     BrushMotor& brushMotor_;

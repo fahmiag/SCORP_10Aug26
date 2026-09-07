@@ -299,3 +299,8 @@ void StateMachine::ResetCycleCount()
 
     DEBUG_PRINTLN("[CYCLE] Counter reset");
 }
+
+StateMachine::State StateMachine::GetState() const
+{
+    return state_;
+}

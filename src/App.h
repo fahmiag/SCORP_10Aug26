@@ -5,6 +5,8 @@
 #include "IO.h"
 #include "StateMachine.h"
 #include "config/PinMap.h"
+#include <Wire.h>               // Required for I2C communication
+#include "Display/Display.h"
 
 class App
 {
@@ -22,4 +24,6 @@ private:
     AxisMotor verticalMotor_;
 
     StateMachine stateMachine_;
+
+    Display display_;
 };
