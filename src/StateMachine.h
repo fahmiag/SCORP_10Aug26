@@ -36,6 +36,7 @@ public:
 
 
     State GetState() const;
+    AxisDirection GetAxisDirection() const;
 
     uint32_t GetCycleCount() const;
     void ResetCycleCount();

@@ -304,3 +304,8 @@ StateMachine::State StateMachine::GetState() const
 {
     return state_;
 }
+
+StateMachine::AxisDirection StateMachine::GetAxisDirection() const
+{
+    return verticalDirection_;
+}

@@ -68,7 +68,8 @@ void App::Update()
 
     display_.Update(
         stateMachine_.GetState(),
-        verticalMotor_.GetDirection()
+        stateMachine_.GetAxisDirection(),
+        stateMachine_.GetCycleCount()
     );
 
     wdt_reset();

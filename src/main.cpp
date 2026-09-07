@@ -22,9 +22,9 @@
  * [x] Emergency Stop, Stop all motor immediately
  * [ ] Add timeout, fault
  * [x] Add count
- * [ ] Test the code with actual motor driver and DC motor
- * [ ] Test Watch Dog Timer
- * [ ] Add LCD Display
+ * [x] Test the code with actual motor driver and DC motor
+ * [x] Test Watch Dog Timer
+ * [x] Add LCD Display
  * [ ] Save count data in EEPROM
  * [ ] Send count data to RasPI
  * [ ] Write Debug function

@@ -1,5 +1,5 @@
 #include "Display.h"
-
+//constructor updated with wrong previous value
 Display::Display(
     uint8_t address,
     uint8_t columns,
@@ -10,7 +10,8 @@ Display::Display(
       rows_(rows),
       initialized_(false),
       previousState_(StateMachine::State::FAULT),
-      previousDirection_(AxisMotor::Direction::STOP),
+      previousDirection_(StateMachine::AxisDirection::UP),
+      previousCycleCount_(UINT32_MAX),
       lastUpdateTime_(0)
 {
 }
@@ -101,7 +102,8 @@ void Display::SetBacklight(bool enabled)
 
 void Display::Update(
     StateMachine::State state,
-    AxisMotor::Direction axisDirection
+    StateMachine::AxisDirection direction,
+    uint32_t cycleCount
 )
 {
     if (!initialized_)
@@ -113,67 +115,96 @@ void Display::Update(
         state != previousState_;
 
     const bool directionChanged =
-        axisDirection != previousDirection_;
+        direction != previousDirection_;
+    
+    const bool cycleChanged =
+        cycleCount != previousCycleCount_;
 
     const bool periodicUpdate =
         (now - lastUpdateTime_) >= UPDATE_INTERVAL_MS;
 
         // No changes and 1 second hasn't passed
 
-    // if (!stateChanged &&
-    //     !directionChanged &&
-    //     !periodicUpdate)
-
     if (!stateChanged &&
-        !directionChanged)
+        !directionChanged &&
+        !cycleChanged &&
+        !periodicUpdate)
     {
         return;
     }
 
-    // Remember latest values
-    previousState_ = state;
-    previousDirection_ = axisDirection;
+     
+    // ---------------------------------------
+    // Update state row only when necessary
+    // ---------------------------------------
+    if (stateChanged || periodicUpdate)
+    {
+        switch (state)
+        {
+            case StateMachine::State::IDLE:
+                PrintLine(1, "State: IDLE   ");
+                break;
+
+            case StateMachine::State::RUNNING:
+                PrintLine(1, "State: RUNNING");
+                break;
+            
+            case StateMachine::State::WAITING_TO_REVERSE:
+                PrintLine(1, "State: REVERSE");
+                break;
+            
+            case StateMachine::State::STOPPING:
+                PrintLine(1, "State: STOPPING");
+                break;
+
+            case StateMachine::State::FAULT:
+                PrintLine(1, "State: FAULT   ");
+                break;
+        }
+        previousState_ = state;
+    }
+    // ---------------------------------------
+    // Update direction row only when necessary
+    // ---------------------------------------
+
+        if (directionChanged || periodicUpdate)
+    {
+        switch (direction)
+        {
+            case StateMachine::AxisDirection::UP:
+                PrintLine(2, "Dir  : UP");
+                break;
+
+            case StateMachine::AxisDirection::DOWN:
+                PrintLine(2, "Dir  : DOWN");
+                break;
+        }
+
+        previousDirection_ = direction;
+    }
+
+        // ---------------------------------------
+    // Update cycle row only when necessary
+    // ---------------------------------------
+
+    if (cycleChanged || periodicUpdate)
+    {
+        char buffer[21];
+
+        snprintf(
+            buffer,
+            sizeof(buffer),
+            "Cycle: %lu",
+            static_cast<unsigned long>(cycleCount)
+        );
+
+        PrintLine(3, buffer);
+
+        previousCycleCount_ = cycleCount;
+    }
+
+   
+    
     lastUpdateTime_ = now;
 
-    // -------------------------
-    // State
-    // -------------------------
-
-    switch (state)
-    {
-        case StateMachine::State::IDLE:
-            PrintLine(1, "State: IDLE");
-            break;
-
-        case StateMachine::State::RUNNING:
-            PrintLine(1, "State: RUNNING");
-            break;
-        
-        case StateMachine::State::WAITING_TO_REVERSE:
-            PrintLine(1, "State: REVERSE");
-            break;
-        
-        case StateMachine::State::STOPPING:
-            PrintLine(1, "State: STOPPING");
-            break;
-
-        case StateMachine::State::FAULT:
-            PrintLine(1, "State: FAULT");
-            break;
-    }
-
-    switch (axisDirection)
-    {
-        case AxisMotor::Direction::UP:
-            PrintLine(2, "Move : UP");
-            break;
-
-        case AxisMotor::Direction::DOWN:
-            PrintLine(2, "Move : DOWN");
-            break;
-
-        case AxisMotor::Direction::STOP:
-            PrintLine(2, "Move : STOP");
-            break;
-    }
 }

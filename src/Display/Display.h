@@ -18,7 +18,8 @@ public:
 
     void Update(
         StateMachine::State state,
-        AxisMotor::Direction axisDirection
+        StateMachine::AxisDirection direction,
+        uint32_t cycleCount
     );
 
     void Clear();
@@ -50,10 +51,10 @@ private:
     bool initialized_;
 
     StateMachine::State previousState_;
-
-    AxisMotor::Direction previousDirection_;
+    StateMachine::AxisDirection previousDirection_;
+    uint32_t previousCycleCount_;
 
     unsigned long lastUpdateTime_;
 
-    static constexpr unsigned long UPDATE_INTERVAL_MS = 1000;
+    static constexpr unsigned long UPDATE_INTERVAL_MS = 2000;
 };
