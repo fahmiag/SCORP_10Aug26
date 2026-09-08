@@ -69,6 +69,7 @@ void App::Update()
     display_.Update(
         stateMachine_.GetState(),
         stateMachine_.GetAxisDirection(),
+        stateMachine_.GetFault(),
         stateMachine_.GetCycleCount()
     );
 

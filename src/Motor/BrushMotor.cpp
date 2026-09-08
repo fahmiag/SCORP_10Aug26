@@ -1,5 +1,5 @@
 #include "BrushMotor.h"
-#include "Debug.h"
+#include "config/Debug.h"
 
 BrushMotor::BrushMotor(uint8_t pwmPin, uint8_t dirPin)
     : pwmPin_(pwmPin),

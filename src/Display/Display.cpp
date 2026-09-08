@@ -103,6 +103,7 @@ void Display::SetBacklight(bool enabled)
 void Display::Update(
     StateMachine::State state,
     StateMachine::AxisDirection direction,
+    StateMachine::FaultReason fault,
     uint32_t cycleCount
 )
 {
@@ -120,15 +121,19 @@ void Display::Update(
     const bool cycleChanged =
         cycleCount != previousCycleCount_;
 
-    const bool periodicUpdate =
-        (now - lastUpdateTime_) >= UPDATE_INTERVAL_MS;
+    // const bool periodicUpdate =
+    //     (now - lastUpdateTime_) >= UPDATE_INTERVAL_MS;
+    const bool faultChanged =
+        fault != previousFault_;
+    
 
-        // No changes and 1 second hasn't passed
+    // No changes
 
     if (!stateChanged &&
         !directionChanged &&
         !cycleChanged &&
-        !periodicUpdate)
+        !faultChanged
+    )
     {
         return;
     }
@@ -137,7 +142,7 @@ void Display::Update(
     // ---------------------------------------
     // Update state row only when necessary
     // ---------------------------------------
-    if (stateChanged || periodicUpdate)
+    if (stateChanged) //(stateChanged || periodicUpdate)
     {
         switch (state)
         {
@@ -167,7 +172,7 @@ void Display::Update(
     // Update direction row only when necessary
     // ---------------------------------------
 
-        if (directionChanged || periodicUpdate)
+    if (directionChanged) //(directionChanged || periodicUpdate)
     {
         switch (direction)
         {
@@ -187,7 +192,7 @@ void Display::Update(
     // Update cycle row only when necessary
     // ---------------------------------------
 
-    if (cycleChanged || periodicUpdate)
+    if (cycleChanged) //(cycleChanged || periodicUpdate)
     {
         char buffer[21];
 
@@ -201,6 +206,22 @@ void Display::Update(
         PrintLine(3, buffer);
 
         previousCycleCount_ = cycleCount;
+    }
+
+    if (faultChanged)
+    {
+        switch (fault)
+        {
+            case StateMachine::FaultReason::NONE:
+                PrintLine(2, "                "); //delete all fault
+                break;
+
+            case StateMachine::FaultReason::AXIS_TIMEOUT:
+                PrintLine(2, "FAULT: TIMEOUT");
+                break;
+
+        }
+        previousFault_ = fault;
     }
 
    

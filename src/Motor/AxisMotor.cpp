@@ -1,5 +1,5 @@
 #include "AxisMotor.h"
-#include "Debug.h"
+#include "config/Debug.h"
 
 AxisMotor::AxisMotor(
     uint8_t pwmPin,
@@ -169,13 +169,13 @@ void AxisMotor::ApplyOutput()
 
     if (direction_ == Direction::UP && IsAtUpperLimit())  
     {
-        //analogWrite(pwmPin_, 0);
+        analogWrite(pwmPin_, 0);
         return;
     }
 
     if (direction_ == Direction::DOWN && IsAtLowerLimit())
     {
-        //analogWrite(pwmPin_, 0);
+        analogWrite(pwmPin_, 0);
         return;
     }
 

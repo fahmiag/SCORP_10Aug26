@@ -33,10 +33,20 @@ public:
         DOWN
     };
 
+    enum class FaultReason
+    {
+        NONE,
+        AXIS_TIMEOUT,
+        TOP_LIMIT_ERROR, //Temporary placeholder
+        BOTTOM_LIMIT_ERROR
+    };
+
 
 
     State GetState() const;
     AxisDirection GetAxisDirection() const;
+
+    FaultReason GetFault() const;
 
     uint32_t GetCycleCount() const;
     void ResetCycleCount();
@@ -52,9 +62,10 @@ private:
 
     State state_;
     AxisDirection verticalDirection_;
+    FaultReason FaultReason_;
 
     unsigned long reverseStartTime_;
-    static constexpr unsigned long REVERSE_DELAY_MS = 2000;
+    static constexpr unsigned long REVERSE_DELAY_MS = 3000;
 
     // Used for button edge detection
     bool previousStart_;
@@ -78,4 +89,11 @@ private:
 
     //bool StartPressedEvent();
     //bool StopPressedEvent();
+
+    static constexpr unsigned long AXIS_TIMEOUT_MS = 40000;
+
+    unsigned long axisMoveStartTime_;
+
+    void CheckAxisTimeout();
+    void EnterFault(FaultReason reason);
 };

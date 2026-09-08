@@ -1,5 +1,5 @@
 #include "StateMachine.h"
-#include "Debug.h"
+#include "config/Debug.h"
 
 StateMachine::StateMachine(
     IO& io,
@@ -12,7 +12,9 @@ StateMachine::StateMachine(
       verticalDirection_(AxisDirection::UP),
       reverseStartTime_(0),
       cycleCount_(0),
-      cycleUpCompleted_(false)
+      cycleUpCompleted_(false),
+      axisMoveStartTime_(0),
+      FaultReason_(FaultReason::NONE)
 {
 }
 
@@ -39,6 +41,8 @@ void StateMachine::Begin()
 
 void StateMachine::Update()
 {
+    CheckAxisTimeout();
+
     switch (state_)
     {
         case State::IDLE:
@@ -56,6 +60,11 @@ void StateMachine::Update()
         case State::STOPPING:
             HandleStopping();
             break;
+
+        case State::FAULT:
+            // Motors remain stopped
+            // For Now only Reboot can remove state FAULT
+            break;
     }
 }
 
@@ -69,6 +78,8 @@ void StateMachine::HandleIdle()
     if (io_.StartEvent())
     {
         StartMachine();
+
+  
     }
 }
 
@@ -184,6 +195,8 @@ void StateMachine::HandleWaitingToReverse()
     {
         ReverseAxis();
     }
+
+
 }
 
 void StateMachine::ReverseAxis()
@@ -226,6 +239,8 @@ void StateMachine::HandleStopping()
     {
         DEBUG_PRINTLN("[STATE] IDLE");
         state_ = State::IDLE;
+
+        
     }
 }
 
@@ -263,6 +278,8 @@ void StateMachine::StartMachine()
     }
 
     verticalMotor_.SetSpeed(180);
+
+    axisMoveStartTime_ = millis();
 }
 
 
@@ -308,4 +325,42 @@ StateMachine::State StateMachine::GetState() const
 StateMachine::AxisDirection StateMachine::GetAxisDirection() const
 {
     return verticalDirection_;
+}
+
+StateMachine::FaultReason  StateMachine::GetFault() const
+{
+    return FaultReason_;
+;
+}
+
+void StateMachine::CheckAxisTimeout()
+{
+    if (state_ != State::RUNNING)
+        return;
+
+    if (axisMoveStartTime_ == 0)
+        return;
+
+    const unsigned long elapsed =
+        millis() - axisMoveStartTime_;
+
+    if (elapsed >= AXIS_TIMEOUT_MS)
+    {
+        Serial.println("[FAULT] Axis movement timeout");
+        EnterFault(FaultReason::AXIS_TIMEOUT);
+
+        
+    }
+}
+
+void StateMachine::EnterFault(FaultReason reason)
+{
+    verticalMotor_.Stop();
+    brushMotor_.Stop();
+
+    state_ = State::FAULT;
+    //FaultReason_ = StateMachine::GetFault();
+    FaultReason_ = reason;
+
+    Serial.println("[STATE] FAULT");
 }

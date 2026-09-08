@@ -2,7 +2,7 @@
 
 #include "IO.h"
 #include "config/PinMap.h"
-#include "Debug.h"
+#include "config/Debug.h"
 
 void IO::Begin()
 {

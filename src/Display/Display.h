@@ -19,6 +19,7 @@ public:
     void Update(
         StateMachine::State state,
         StateMachine::AxisDirection direction,
+        StateMachine::FaultReason fault,
         uint32_t cycleCount
     );
 
@@ -52,6 +53,7 @@ private:
 
     StateMachine::State previousState_;
     StateMachine::AxisDirection previousDirection_;
+    StateMachine::FaultReason previousFault_;
     uint32_t previousCycleCount_;
 
     unsigned long lastUpdateTime_;
