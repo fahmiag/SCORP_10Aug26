@@ -368,6 +368,7 @@ void StateMachine::CheckAxisTimeout()
     if (elapsed >= AXIS_TIMEOUT_MS)
     {
         Serial.println("[FAULT] Axis movement timeout");
+        cycleStorage_.SaveCount(cycleCount_);
         EnterFault(FaultReason::AXIS_TIMEOUT);
 
         

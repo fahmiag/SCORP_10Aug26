@@ -97,7 +97,9 @@ private:
     //bool StartPressedEvent();
     //bool StopPressedEvent();
 
-    static constexpr unsigned long AXIS_TIMEOUT_MS = 40000;
+    static constexpr unsigned long AXIS_TIMEOUT_MS = 75000;
+    //75000 Abrasion test
+    //40000 test Rig
 
     unsigned long axisMoveStartTime_;
 
