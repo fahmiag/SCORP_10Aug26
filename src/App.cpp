@@ -45,8 +45,12 @@ void App::Begin()
     io_.Begin();
 
     verticalMotor_.Begin();
-                     
     brushMotor_.Begin();
+
+    cycleStorage_.Begin();
+
+    // TEMPORARY - reset EEPROM counter
+   // stateMachine_.ResetCycleCount();
 
     stateMachine_.Begin();
 
@@ -54,8 +58,6 @@ void App::Begin()
 
     display_.PrintLine(0, "SCORP Robot");
     display_.PrintLine(1, "State: IDLE");
-
-
 
     Serial.println("[APP] System ready");
 }

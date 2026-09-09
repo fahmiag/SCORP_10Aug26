@@ -41,8 +41,11 @@ void StateMachine::Begin()
     cycleCount_ = cycleStorage_.LoadCount();
     lastSavedCycleCount_ = cycleCount_;
 
+    DEBUG_PRINT("[CYCLE] Loaded counter = ");
+    DEBUG_PRINTLN(cycleCount_);
+
     DEBUG_PRINTLN("[STATE] IDLE");
-    DEBUG_PRINTLN("[CYCLE] Counter = 0");
+    DEBUG_PRINTLN("[CYCLE] Loaded Counter = 0");
 
     
 }
@@ -131,7 +134,7 @@ void StateMachine::HandleRunning()
         {       
             if (cycleUpCompleted_)
             {
-                cycleCount_++;
+                IncrementCycleCount();
 
                 cycleUpCompleted_ = false;
 
@@ -231,6 +234,10 @@ void StateMachine::ReverseAxis()
     state_ = State::RUNNING;
 
     DEBUG_PRINTLN("[STATE] RUNNING");
+
+    // New axis movement starts here.
+    // Restart movement timeout.
+    axisMoveStartTime_ = millis();
 }
 
 // ======================================================
@@ -307,6 +314,8 @@ void StateMachine::StopMachine()
     verticalMotor_.Stop();
     brushMotor_.Stop();
 
+    axisMoveStartTime_ = 0;
+
     // IMPORTANT:
     // axisDirection_ is NOT changed.
     //
@@ -322,9 +331,11 @@ uint32_t StateMachine::GetCycleCount() const
 void StateMachine::ResetCycleCount()
 {
     cycleCount_ = 0;
-    cycleUpCompleted_ = false;
+    lastSavedCycleCount_ = 0;
 
-    DEBUG_PRINTLN("[CYCLE] Counter reset");
+    cycleStorage_.SaveCount(0);
+
+    DEBUG_PRINTLN("[CYCLE] Counter reset to 0");
 }
 
 StateMachine::State StateMachine::GetState() const
