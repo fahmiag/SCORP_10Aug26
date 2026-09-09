@@ -23,6 +23,8 @@ private:
 
     AxisMotor verticalMotor_;
 
+    CycleStorage cycleStorage_;
+
     StateMachine stateMachine_;
 
     Display display_;

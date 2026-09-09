@@ -4,17 +4,21 @@
 StateMachine::StateMachine(
     IO& io,
     BrushMotor& brushMotor,
-    AxisMotor& axisMotor1)
+    AxisMotor& axisMotor1,
+    CycleStorage& cycleStorage
+    )
     : io_(io),
       brushMotor_(brushMotor),
       verticalMotor_(axisMotor1),
+      cycleStorage_(cycleStorage),
       state_(State::IDLE),
       verticalDirection_(AxisDirection::UP),
+      FaultReason_(FaultReason::NONE),
       reverseStartTime_(0),
       cycleCount_(0),
       cycleUpCompleted_(false),
-      axisMoveStartTime_(0),
-      FaultReason_(FaultReason::NONE)
+      lastSavedCycleCount_(0),
+      axisMoveStartTime_(0)
 {
 }
 
@@ -28,15 +32,19 @@ void StateMachine::Begin()
 
     reverseStartTime_ = 0;
 
-
     cycleCount_ = 0;
     cycleUpCompleted_ = false;
 
     brushMotor_.Stop();
     verticalMotor_.Stop();
 
+    cycleCount_ = cycleStorage_.LoadCount();
+    lastSavedCycleCount_ = cycleCount_;
+
     DEBUG_PRINTLN("[STATE] IDLE");
     DEBUG_PRINTLN("[CYCLE] Counter = 0");
+
+    
 }
 
 void StateMachine::Update()
@@ -240,6 +248,8 @@ void StateMachine::HandleStopping()
         DEBUG_PRINTLN("[STATE] IDLE");
         state_ = State::IDLE;
 
+        SaveCycleCount();
+
         
     }
 }
@@ -363,4 +373,33 @@ void StateMachine::EnterFault(FaultReason reason)
     FaultReason_ = reason;
 
     Serial.println("[STATE] FAULT");
+}
+
+void StateMachine::IncrementCycleCount()
+{
+    cycleCount_++;
+
+    if ((cycleCount_ - lastSavedCycleCount_) >=
+        SAVE_INTERVAL_CYCLES)
+    {
+        cycleStorage_.SaveCount(cycleCount_);
+
+        lastSavedCycleCount_ = cycleCount_;
+
+        Serial.print("[EEPROM] Saved cycle count: ");
+        Serial.println(cycleCount_);
+    }
+}
+
+void StateMachine::SaveCycleCount()
+{
+    if (cycleCount_ == lastSavedCycleCount_)
+        return;
+
+    cycleStorage_.SaveCount(cycleCount_);
+
+    lastSavedCycleCount_ = cycleCount_;
+
+    Serial.print("[EEPROM] Saved cycle count: ");
+    Serial.println(cycleCount_);
 }

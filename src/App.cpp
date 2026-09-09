@@ -17,12 +17,14 @@ App::App()
           Pin::VerticalTopLimit,
           Pin::VerticalBottomLimit),
 
-
+      cycleStorage_(),
 
       stateMachine_(
           io_,
           brushMotor_,
-          verticalMotor_),
+          verticalMotor_,
+          cycleStorage_
+    ),
 
       display_(0x27, 20, 4)
 {
@@ -45,6 +47,8 @@ void App::Begin()
     verticalMotor_.Begin();
                      
     brushMotor_.Begin();
+
+    stateMachine_.Begin();
 
     display_.Begin();
 

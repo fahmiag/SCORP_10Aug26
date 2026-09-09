@@ -5,6 +5,7 @@
 #include "IO.h"
 #include "Motor/BrushMotor.h"
 #include "Motor/AxisMotor.h"
+#include "CycleStorage.h"
 
 class StateMachine
 {
@@ -12,7 +13,8 @@ public:
     StateMachine(
         IO& io,
         BrushMotor& brushMotor,
-        AxisMotor& verticalMotor
+        AxisMotor& verticalMotor,
+        CycleStorage& cycleStorage
     );
 
     void Begin();
@@ -51,6 +53,9 @@ public:
     uint32_t GetCycleCount() const;
     void ResetCycleCount();
 
+    void IncrementCycleCount();
+    void SaveCycleCount();
+
 
 private:
 
@@ -59,6 +64,7 @@ private:
     IO& io_;
     BrushMotor& brushMotor_;
     AxisMotor& verticalMotor_;
+    CycleStorage& cycleStorage_;
 
     State state_;
     AxisDirection verticalDirection_;
@@ -74,6 +80,7 @@ private:
     // Cycle counter
     uint32_t cycleCount_;
     bool cycleUpCompleted_;
+    uint32_t lastSavedCycleCount_;
 
     void HandleIdle();
     void HandleRunning();
@@ -96,4 +103,10 @@ private:
 
     void CheckAxisTimeout();
     void EnterFault(FaultReason reason);
+
+
+    static constexpr uint32_t SAVE_INTERVAL_CYCLES = 10;
+
+
+    
 };
