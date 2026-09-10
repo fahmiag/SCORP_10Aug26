@@ -4,6 +4,7 @@
 #include <LiquidCrystal_I2C.h>
 #include "../StateMachine.h"
 #include "../Motor/AxisMotor.h"
+#include <Wire.h>    // Required for I2C communication
 
 class Display
 {
@@ -58,5 +59,5 @@ private:
 
     unsigned long lastUpdateTime_;
 
-    static constexpr unsigned long UPDATE_INTERVAL_MS = 2000;
+    
 };

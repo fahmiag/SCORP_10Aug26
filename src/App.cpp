@@ -4,6 +4,8 @@
 #include <Arduino.h>
 #include <avr/wdt.h>
 
+#include "config/PinMap.h"
+
 
 
 App::App()

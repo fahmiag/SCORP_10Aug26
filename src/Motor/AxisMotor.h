@@ -2,6 +2,9 @@
 
 #include <Arduino.h>
 
+
+
+
 class AxisMotor
 {
 public:
@@ -50,15 +53,20 @@ private:
     uint8_t upperLimitPin_;
     uint8_t lowerLimitPin_;
 
-    int targetSpeed_;
-    int currentSpeed_;
-
     Direction direction_;
 
-   // uint8_t currentSpeed_;
-   // uint8_t targetSpeed_;
+    // int targetSpeed_;
+    // int currentSpeed_;
 
+    
+
+   uint8_t currentSpeed_;
+   uint8_t targetSpeed_;
+
+   
     uint8_t rampRate_;
+
+    
 
     unsigned long lastUpdateTime_;
 

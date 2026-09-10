@@ -1,5 +1,7 @@
 #include "StateMachine.h"
 #include "config/Debug.h"
+#include "config/Config.h"
+
 
 StateMachine::StateMachine(
     IO& io,
@@ -202,7 +204,7 @@ void StateMachine::HandleWaitingToReverse()
     unsigned long elapsed =
         millis() - reverseStartTime_;
 
-    if (elapsed >= REVERSE_DELAY_MS)
+    if (elapsed >= Config::REVERSE_DELAY_MS)
     {
         ReverseAxis();
     }
@@ -365,7 +367,7 @@ void StateMachine::CheckAxisTimeout()
     const unsigned long elapsed =
         millis() - axisMoveStartTime_;
 
-    if (elapsed >= AXIS_TIMEOUT_MS)
+    if (elapsed >= Config::AXIS_TIMEOUT_MS)
     {
         Serial.println("[FAULT] Axis movement timeout");
         cycleStorage_.SaveCount(cycleCount_);
@@ -392,7 +394,7 @@ void StateMachine::IncrementCycleCount()
     cycleCount_++;
 
     if ((cycleCount_ - lastSavedCycleCount_) >=
-        SAVE_INTERVAL_CYCLES)
+        Config::SAVE_INTERVAL_CYCLES)
     {
         cycleStorage_.SaveCount(cycleCount_);
 

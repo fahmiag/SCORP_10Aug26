@@ -1,12 +1,12 @@
 #pragma once
 
+#include "IO.h"
 #include "Motor/AxisMotor.h"
 #include "Motor/BrushMotor.h"
-#include "IO.h"
 #include "StateMachine.h"
-#include "config/PinMap.h"
-#include <Wire.h>               // Required for I2C communication
 #include "Display/Display.h"
+
+
 
 class App
 {

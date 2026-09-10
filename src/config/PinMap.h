@@ -11,6 +11,9 @@ namespace Pin
     //Vertical Motor
     constexpr uint8_t VerticalMotorPWM {10};
     constexpr uint8_t VerticalMotorDir {8};
+    
+    constexpr uint8_t VerticalMotorPWM2 {11};
+    constexpr uint8_t VerticalMotorDir2 {9};
 
     constexpr uint8_t VerticalTopLimit {5};
     constexpr uint8_t VerticalBottomLimit {4}; 

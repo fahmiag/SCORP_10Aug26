@@ -20,12 +20,14 @@
  * [x] Stop for a while during direction change
  * [x] Check EmergencyStop() code
  * [x] Emergency Stop, Stop all motor immediately
- * [ ] Add timeout, fault
+ * [x] Add timeout, fault
  * [x] Add count
  * [x] Test the code with actual motor driver and DC motor
  * [x] Test Watch Dog Timer
  * [x] Add LCD Display
- * [ ] Save count data in EEPROM
+ * [x] Save count data in EEPROM
+ * [x] Move all configs to Config.h
+ * [x] Move all pins to PinMap.h
  * [ ] Send count data to RasPI
  * [ ] Write Debug function
  * [ ] Remove Magic number

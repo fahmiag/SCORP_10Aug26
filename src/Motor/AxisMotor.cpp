@@ -1,5 +1,7 @@
 #include "AxisMotor.h"
+#include "config/PinMap.h"
 #include "config/Debug.h"
+#include "config/Config.h"
 
 AxisMotor::AxisMotor(
     uint8_t pwmPin,
@@ -13,7 +15,7 @@ AxisMotor::AxisMotor(
       direction_(Direction::STOP),
       currentSpeed_(0),
       targetSpeed_(0),
-      rampRate_(51),
+      rampRate_(Config::VERTICAL_RAMP_RATE),
       lastUpdateTime_(0)
 {
 }
@@ -25,6 +27,12 @@ void AxisMotor::Begin()
 
     pinMode(upperLimitPin_, INPUT_PULLUP);
     pinMode(lowerLimitPin_, INPUT_PULLUP);
+
+    
+    pinMode(Pin::VerticalMotorPWM2, OUTPUT);
+    pinMode(Pin::VerticalMotorDir2, OUTPUT);
+
+
 
     direction_ = Direction::STOP;
     currentSpeed_ = 0;
@@ -53,7 +61,7 @@ void AxisMotor::Update()
         EmergencyStop();
     }
 
-    if (now - lastUpdateTime_ < 10)
+    if (now - lastUpdateTime_ < Config::VERTICAL_UPDATE_RATE)
         return;
 
     lastUpdateTime_ = now;
@@ -123,6 +131,8 @@ void AxisMotor::EmergencyStop() //Immediate output shutdown
     analogWrite(pwmPin_, 0); 
     targetSpeed_ = 0;
     currentSpeed_ = 0;
+
+    analogWrite(Pin::VerticalMotorPWM2, 0); 
 }
 
 void AxisMotor::SetSpeed(uint8_t speed)
@@ -170,12 +180,14 @@ void AxisMotor::ApplyOutput()
     if (direction_ == Direction::UP && IsAtUpperLimit())  
     {
         analogWrite(pwmPin_, 0);
+        analogWrite(Pin::VerticalMotorPWM2, 0);
         return;
     }
 
     if (direction_ == Direction::DOWN && IsAtLowerLimit())
     {
         analogWrite(pwmPin_, 0);
+        analogWrite(Pin::VerticalMotorPWM2, 0);
         return;
     }
 
@@ -183,10 +195,12 @@ void AxisMotor::ApplyOutput()
     {
         case Direction::UP:
             digitalWrite(dirPin_, HIGH);
+            digitalWrite(Pin::VerticalMotorDir2, HIGH);
             break;
 
         case Direction::DOWN:
             digitalWrite(dirPin_, LOW);
+            digitalWrite(Pin::VerticalMotorDir2, LOW);
             break;
 
         case Direction::STOP:
@@ -195,9 +209,9 @@ void AxisMotor::ApplyOutput()
     }
 
     analogWrite(pwmPin_, currentSpeed_);
+    analogWrite(Pin::VerticalMotorDir2, currentSpeed_);
 }
 
-//TODO: add EmergencyStop()
 
 AxisMotor::Direction AxisMotor::GetDirection() const
 {

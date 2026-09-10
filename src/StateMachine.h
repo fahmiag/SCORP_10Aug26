@@ -7,6 +7,8 @@
 #include "Motor/AxisMotor.h"
 #include "CycleStorage.h"
 
+
+
 class StateMachine
 {
 public:
@@ -71,7 +73,7 @@ private:
     FaultReason FaultReason_;
 
     unsigned long reverseStartTime_;
-    static constexpr unsigned long REVERSE_DELAY_MS = 3000;
+    //static constexpr unsigned long REVERSE_DELAY_MS = 3000;
 
     // Used for button edge detection
     bool previousStart_;
@@ -97,7 +99,7 @@ private:
     //bool StartPressedEvent();
     //bool StopPressedEvent();
 
-    static constexpr unsigned long AXIS_TIMEOUT_MS = 75000;
+    //static constexpr unsigned long AXIS_TIMEOUT_MS = 75000;
     //75000 Abrasion test
     //40000 test Rig
 
@@ -107,7 +109,7 @@ private:
     void EnterFault(FaultReason reason);
 
 
-    static constexpr uint32_t SAVE_INTERVAL_CYCLES = 10;
+    //static constexpr uint32_t SAVE_INTERVAL_CYCLES = 10;
 
 
     

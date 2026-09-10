@@ -1,5 +1,6 @@
 #include "BrushMotor.h"
-#include "config/Debug.h"
+#include "config/PinMap.h"
+#include "config/Config.h"
 
 BrushMotor::BrushMotor(uint8_t pwmPin, uint8_t dirPin)
     : pwmPin_(pwmPin),
@@ -7,7 +8,7 @@ BrushMotor::BrushMotor(uint8_t pwmPin, uint8_t dirPin)
       direction_(Direction::STOP),
       currentSpeed_(0),
       targetSpeed_(0),
-      rampRate_(20), //5
+      rampRate_(Config::BRUSH_RAMP_RATE), //5
       lastUpdateTime_(0)
 {
 }
@@ -30,7 +31,7 @@ void BrushMotor::Update()
 {
     unsigned long now = millis();
 
-    if (now - lastUpdateTime_ < 10)
+    if (now - lastUpdateTime_ < Config::BRUSH_UPDATE_RATE)
         return;
 
     lastUpdateTime_ = now;

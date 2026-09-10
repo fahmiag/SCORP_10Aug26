@@ -1,4 +1,6 @@
 #include "Display.h"
+#include "config/Config.h"
+
 //constructor updated with wrong previous value
 Display::Display(
     uint8_t address,
