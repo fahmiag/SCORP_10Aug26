@@ -133,6 +133,7 @@ void AxisMotor::EmergencyStop() //Immediate output shutdown
     currentSpeed_ = 0;
 
     analogWrite(Pin::VerticalMotorPWM2, 0); 
+    
 }
 
 void AxisMotor::SetSpeed(uint8_t speed)
@@ -209,7 +210,7 @@ void AxisMotor::ApplyOutput()
     }
 
     analogWrite(pwmPin_, currentSpeed_);
-    analogWrite(Pin::VerticalMotorDir2, currentSpeed_);
+    analogWrite(Pin::VerticalMotorPWM2, currentSpeed_);
 }
 
 

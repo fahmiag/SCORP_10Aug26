@@ -19,8 +19,8 @@ namespace Pin
     constexpr uint8_t VerticalBottomLimit {4}; 
 
     //Brush motor
-    constexpr uint8_t BrushPWM {11};
-    constexpr uint8_t BrushDir {9};
+    constexpr uint8_t BrushPWM {3};
+    constexpr uint8_t BrushDir {2};
 
     //Button
     constexpr uint8_t BUTTON_START {A0};
