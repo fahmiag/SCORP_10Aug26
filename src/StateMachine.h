@@ -28,7 +28,8 @@ public:
         RUNNING,
         WAITING_TO_REVERSE,
         STOPPING,
-        FAULT
+        FAULT,
+        ESTOP
     };
 
     enum class AxisDirection
@@ -110,6 +111,8 @@ private:
 
 
     //static constexpr uint32_t SAVE_INTERVAL_CYCLES = 10;
+
+    void EnterEmergencyStop();
 
 
     

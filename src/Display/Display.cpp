@@ -13,6 +13,7 @@ Display::Display(
       initialized_(false),
       previousState_(StateMachine::State::FAULT),
       previousDirection_(StateMachine::AxisDirection::UP),
+      previousFault_(StateMachine::FaultReason::NONE),
       previousCycleCount_(UINT32_MAX),
       lastUpdateTime_(0)
 {
@@ -112,6 +113,23 @@ void Display::Update(
     if (!initialized_)
         return;
 
+    // E-stop owns the entire display.
+    // Return before direction, cycle or fault updates can overwrite it.
+    if (state == StateMachine::State::ESTOP)
+    {
+        if (previousState_ != StateMachine::State::ESTOP)
+        {
+            PrintLine(0, "SCORP Robot");
+            PrintLine(1, "*** E-STOP ***");
+            PrintLine(2, "Release E-stop");
+            PrintLine(3, "Then reset Arduino");
+
+            previousState_ = StateMachine::State::ESTOP;
+        }
+
+        return;
+    }
+
     const unsigned long now = millis();
 
     const bool stateChanged =
@@ -166,6 +184,10 @@ void Display::Update(
 
             case StateMachine::State::FAULT:
                 PrintLine(1, "State: FAULT   ");
+                break;
+
+            case StateMachine::State::ESTOP:
+                // Handled above.
                 break;
         }
         previousState_ = state;

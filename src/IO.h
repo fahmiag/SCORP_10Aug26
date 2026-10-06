@@ -31,6 +31,9 @@ public:
     bool VerticalUpperLimit() const;
     bool VerticalLowerLimit() const;
 
+
+    bool EmergencyStopPressed() const;
+
     //Horizontal Axis Limit
     // bool HorizontalUpperLimit() const;
     // bool HorizontalLowerLimit() const;
@@ -94,4 +97,7 @@ private:
         bool& stableState,
         unsigned long& changeTime
     );
+
+    // Once detected, remains true until Arduino reset.
+    bool emergencyStopLatched_ = false;
 };

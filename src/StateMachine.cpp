@@ -49,11 +49,31 @@ void StateMachine::Begin()
     DEBUG_PRINTLN("[STATE] IDLE");
     DEBUG_PRINTLN("[CYCLE] Loaded Counter = 0");
 
+    // E-stop already pressed at startup:
+    // enter the latched state before normal operation begins.
+    if (io_.EmergencyStopPressed())
+    {
+        EnterEmergencyStop();
+    }
+
     
 }
 
 void StateMachine::Update()
 {
+    // E-stop takes priority over buttons, limits and timeouts.
+    if (io_.EmergencyStopPressed() &&
+        state_ != State::ESTOP)
+    {
+        EnterEmergencyStop();
+    }
+
+    // No normal state processing while latched.
+    if (state_ == State::ESTOP)
+    {
+        return;
+    }
+
     CheckAxisTimeout();
 
     switch (state_)
@@ -77,6 +97,9 @@ void StateMachine::Update()
         case State::FAULT:
             // Motors remain stopped
             // For Now only Reboot can remove state FAULT
+            break;
+
+        case State::ESTOP:
             break;
     }
 }
@@ -416,4 +439,22 @@ void StateMachine::SaveCycleCount()
 
     Serial.print("[EEPROM] Saved cycle count: ");
     Serial.println(cycleCount_);
+}
+
+void StateMachine::EnterEmergencyStop()
+{
+    state_ = State::ESTOP;
+
+    // Immediate shutdown; do not use ramp-down Stop().
+    verticalMotor_.EmergencyStop();
+    brushMotor_.EmergencyStop();
+
+    cycleUpCompleted_ = false;
+    reverseStartTime_ = 0;
+    axisMoveStartTime_ = 0;
+
+    // Preserve completed cycles after outputs are stopped.
+    SaveCycleCount();
+
+    Serial.println("[STATE] E-STOP LATCHED");
 }

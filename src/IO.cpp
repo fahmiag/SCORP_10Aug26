@@ -6,6 +6,13 @@
 
 void IO::Begin()
 {
+    pinMode(Pin::BUTTON_ESTOP, INPUT_PULLUP);
+
+    // Capture E-stop immediately, including during startup.
+    emergencyStopLatched_ =
+        emergencyStopLatched_ ||
+        (digitalRead(Pin::BUTTON_ESTOP) == LOW);
+
     // Buttons
     pinMode(Pin::BUTTON_START, INPUT_PULLUP);
     pinMode(Pin::BUTTON_STOP,  INPUT_PULLUP);
@@ -68,6 +75,14 @@ void IO::Begin()
 
 void IO::Update()
 {
+
+    // Latch immediately without waiting for button debounce.
+    // Contact bounce cannot clear the latch.
+    if (digitalRead(Pin::BUTTON_ESTOP) == LOW)
+    {
+        emergencyStopLatched_ = true;
+    }
+
     unsigned long now = millis();
 
     // Events are generated during this Update()
@@ -268,3 +283,10 @@ bool IO::VerticalLowerLimit() const
     return verticalLowerLimit_;
 }
 
+bool IO::EmergencyStopPressed() const
+{
+    // Also check the actual input so startup checks do not
+    // depend on another IO::Update() call.
+    return emergencyStopLatched_ ||
+           (digitalRead(Pin::BUTTON_ESTOP) == LOW);
+}

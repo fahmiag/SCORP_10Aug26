@@ -56,23 +56,54 @@ void App::Begin()
 
     stateMachine_.Begin();
 
+    // display_.Begin();
+
+    // display_.PrintLine(0, "SCORP Robot");
+    // display_.PrintLine(1, "State: IDLE");
+
+    // Serial.println("[APP] System ready");
+
     display_.Begin();
 
-    display_.PrintLine(0, "SCORP Robot");
-    display_.PrintLine(1, "State: IDLE");
+    // Check again in case E-stop was pressed during LCD startup.
+    io_.Update();
+    stateMachine_.Update();
 
-    Serial.println("[APP] System ready");
+    // Display the actual startup state instead of forcing IDLE.
+    display_.Update(
+        stateMachine_.GetState(),
+        stateMachine_.GetAxisDirection(),
+        stateMachine_.GetFault(),
+        stateMachine_.GetCycleCount()
+    );
+
+    if (stateMachine_.GetState() == StateMachine::State::ESTOP)
+    {
+        Serial.println("[APP] Startup blocked by E-stop");
+    }
+    else
+    {
+        Serial.println("[APP] System ready");
+    }
+
+    wdt_reset();
 }
 
 void App::Update()
 {
 
     io_.Update();
-
     stateMachine_.Update();
 
     brushMotor_.Update();
     verticalMotor_.Update();
+
+    // Skip all normal motor updates while E-stop is latched.
+    if (stateMachine_.GetState() != StateMachine::State::ESTOP)
+    {
+        brushMotor_.Update();
+        verticalMotor_.Update();
+    }
 
     display_.Update(
         stateMachine_.GetState(),
@@ -82,6 +113,9 @@ void App::Update()
     );
 
     wdt_reset();
+    // Keep servicing the watchdog, including during E-stop.
+    // Otherwise a watchdog reset could clear the latch
+    // after the physical button has been released.
  
     
 }

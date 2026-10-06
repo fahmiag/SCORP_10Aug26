@@ -27,6 +27,8 @@ namespace Pin
     constexpr uint8_t BUTTON_START {A0};
     constexpr uint8_t BUTTON_STOP {A1};
 
+    constexpr uint8_t BUTTON_ESTOP {12};
+
     //Horizontal Motor
     // constexpr uint8_t HorizontalMotorPWM {8};
     // constexpr uint8_t HorizontalMotorDir {9};
