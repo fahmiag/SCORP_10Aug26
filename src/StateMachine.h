@@ -5,8 +5,8 @@
 #include "IO.h"
 #include "Motor/BrushMotor.h"
 #include "Motor/AxisMotor.h"
+#include "Motor/PumpMotor.h"
 #include "CycleStorage.h"
-
 
 
 class StateMachine
@@ -16,6 +16,7 @@ public:
         IO& io,
         BrushMotor& brushMotor,
         AxisMotor& verticalMotor,
+        PumpMotor& pumpMotor,
         CycleStorage& cycleStorage
     );
 
@@ -67,6 +68,7 @@ private:
     IO& io_;
     BrushMotor& brushMotor_;
     AxisMotor& verticalMotor_;
+    PumpMotor& pumpMotor_;
     CycleStorage& cycleStorage_;
 
     State state_;

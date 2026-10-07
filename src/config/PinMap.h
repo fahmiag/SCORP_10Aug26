@@ -23,6 +23,10 @@ namespace Pin
     constexpr uint8_t BrushPWM {3};
     constexpr uint8_t BrushDir {2};
 
+    //Brush motor
+    constexpr uint8_t PumpPWM {5};
+    constexpr uint8_t PumpDir {4};
+
     //Button
     constexpr uint8_t BUTTON_START {A0};
     constexpr uint8_t BUTTON_STOP {A1};

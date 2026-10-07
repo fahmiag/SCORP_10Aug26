@@ -20,7 +20,13 @@ namespace Config
 
     constexpr unsigned long REVERSE_DELAY_MS = 3000;
     constexpr unsigned long AXIS_TIMEOUT_MS = 120000;
-    constexpr uint32_t SAVE_INTERVAL_CYCLES = 10;
+
+
+    constexpr uint32_t SAVE_INTERVAL_CYCLES = 10;  //TODO: increase this.
 
     constexpr unsigned long UPDATE_INTERVAL_MS = 2000;
+
+    constexpr uint8_t PUMP_MOTOR_SPEED = 200;
+    constexpr uint8_t PUMP_RAMP_RATE = 10;
+    constexpr unsigned long PUMP_UPDATE_RATE = 20;
 }

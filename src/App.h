@@ -3,6 +3,7 @@
 #include "IO.h"
 #include "Motor/AxisMotor.h"
 #include "Motor/BrushMotor.h"
+#include "Motor/PumpMotor.h"
 #include "StateMachine.h"
 #include "Display/Display.h"
 
@@ -22,6 +23,8 @@ private:
     BrushMotor brushMotor_;
 
     AxisMotor verticalMotor_;
+
+    PumpMotor pumpMotor_;
 
     CycleStorage cycleStorage_;
 

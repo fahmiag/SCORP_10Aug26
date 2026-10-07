@@ -25,10 +25,13 @@ App::App()
           io_,
           brushMotor_,
           verticalMotor_,
-          cycleStorage_
-    ),
+          cycleStorage_),
 
-      display_(0x27, 20, 4)
+      display_(0x27, 20, 4),
+
+      pumpMotor_(
+            Pin::PumpPWM, 
+            Pin::PumpDir)
 {
 }
 
@@ -48,6 +51,7 @@ void App::Begin()
 
     verticalMotor_.Begin();
     brushMotor_.Begin();
+    pumpMotor_.Begin();   
 
     cycleStorage_.Begin();
 
@@ -97,6 +101,7 @@ void App::Update()
 
     brushMotor_.Update();
     verticalMotor_.Update();
+    pumpMotor_.Update(); 
 
     // Skip all normal motor updates while E-stop is latched.
     if (stateMachine_.GetState() != StateMachine::State::ESTOP)

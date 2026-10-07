@@ -7,11 +7,13 @@ StateMachine::StateMachine(
     IO& io,
     BrushMotor& brushMotor,
     AxisMotor& axisMotor1,
+    PumpMotor& pumpMotor,
     CycleStorage& cycleStorage
     )
     : io_(io),
       brushMotor_(brushMotor),
       verticalMotor_(axisMotor1),
+      pumpMotor_(pumpMotor),
       cycleStorage_(cycleStorage),
       state_(State::IDLE),
       verticalDirection_(AxisDirection::UP),
@@ -38,6 +40,7 @@ void StateMachine::Begin()
     cycleUpCompleted_ = false;
 
     brushMotor_.Stop();
+    pumpMotor_.Stop();
     verticalMotor_.Stop();
 
     cycleCount_ = cycleStorage_.LoadCount();
@@ -305,6 +308,12 @@ void StateMachine::StartMachine()
     brushMotor_.SetSpeed(200);
 
     // --------------------------------------------------
+    // Start Pump
+    // --------------------------------------------------
+    pumpMotor_.SetSpeed(200);    // Remember selected speed
+    pumpMotor_.Start();          // Ramp up to selected speed
+
+    // --------------------------------------------------
     // Start axis in remembered direction
     // --------------------------------------------------
 
@@ -338,6 +347,7 @@ void StateMachine::StopMachine()
     // Controlled ramp down
     verticalMotor_.Stop();
     brushMotor_.Stop();
+    pumpMotor_.Stop();
 
     axisMoveStartTime_ = 0;
 
@@ -404,6 +414,7 @@ void StateMachine::EnterFault(FaultReason reason)
 {
     verticalMotor_.Stop();
     brushMotor_.Stop();
+    pumpMotor_.Stop();
 
     state_ = State::FAULT;
     //FaultReason_ = StateMachine::GetFault();
@@ -448,6 +459,7 @@ void StateMachine::EnterEmergencyStop()
     // Immediate shutdown; do not use ramp-down Stop().
     verticalMotor_.EmergencyStop();
     brushMotor_.EmergencyStop();
+    pumpMotor_.EmergencyStop();
 
     cycleUpCompleted_ = false;
     reverseStartTime_ = 0;
