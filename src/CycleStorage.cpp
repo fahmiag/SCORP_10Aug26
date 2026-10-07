@@ -1,4 +1,5 @@
 #include "CycleStorage.h"
+#include <EEPROM.h>
 
 void CycleStorage::Begin()
 {

@@ -278,7 +278,8 @@ void StateMachine::HandleStopping()
     // Wait until they have completely ramped down.
 
     if (!verticalMotor_.IsMoving() &&
-        !brushMotor_.IsRunning())
+        !brushMotor_.IsRunning() &&
+        !pumpMotor_.IsRunning())
     {
         DEBUG_PRINTLN("[STATE] IDLE");
         state_ = State::IDLE;
