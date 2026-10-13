@@ -247,6 +247,7 @@ void StateMachine::ReverseAxis()
         DEBUG_PRINTLN("[AXIS1] Reversing DOWN");
 
         verticalMotor_.MoveDown();
+        verticalMotor_.SetSpeed(Config::VERTICAL_MOTOR_DW_SPEED);
     }
     else
     {
@@ -255,9 +256,10 @@ void StateMachine::ReverseAxis()
         DEBUG_PRINTLN("[AXIS1] Reversing UP");
 
         verticalMotor_.MoveUp();
+        verticalMotor_.SetSpeed(Config::VERTICAL_MOTOR_UP_SPEED);
     }
 
-    verticalMotor_.SetSpeed(180);
+    //verticalMotor_.SetSpeed(Config::VERTICAL_MOTOR_MAX_SPEED);
 
     state_ = State::RUNNING;
 
@@ -306,12 +308,12 @@ void StateMachine::StartMachine()
     // --------------------------------------------------
 
     brushMotor_.Forward();
-    brushMotor_.SetSpeed(200);
+    brushMotor_.SetSpeed(Config::BRUSH_MOTOR_SPEED);
 
     // --------------------------------------------------
     // Start Pump
     // --------------------------------------------------
-    pumpMotor_.SetSpeed(200);    // Remember selected speed
+    pumpMotor_.SetSpeed(Config::PUMP_MOTOR_SPEED);    // Remember selected speed
     pumpMotor_.Start();          // Ramp up to selected speed
 
     // --------------------------------------------------
@@ -322,14 +324,18 @@ void StateMachine::StartMachine()
     {
         verticalMotor_.MoveUp();
         Serial.println("Move UP");
+        
+        verticalMotor_.SetSpeed(Config::VERTICAL_MOTOR_UP_SPEED);
     }
     else
     {
         verticalMotor_.MoveDown();
         Serial.println("Move Down");
+        
+        verticalMotor_.SetSpeed(Config::VERTICAL_MOTOR_DW_SPEED);
     }
 
-    verticalMotor_.SetSpeed(180);
+    //verticalMotor_.SetSpeed(Config::VERTICAL_MOTOR_MAX_SPEED);
 
     axisMoveStartTime_ = millis();
 }
