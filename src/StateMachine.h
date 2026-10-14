@@ -9,8 +9,6 @@
 #include "CycleStorage.h"
 
 
-
-
 class StateMachine
 {
 public:

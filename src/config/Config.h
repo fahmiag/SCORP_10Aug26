@@ -10,8 +10,8 @@ namespace Config
     constexpr uint32_t BUTTON_DEBOUNCE_MS = 50;
     constexpr uint32_t BUTTON_LONG_PRESS_MS = 1000;
 
-    constexpr uint32_t BRUSH_MOTOR_SPEED = 50;
-    constexpr uint32_t BRUSH_RAMP_RATE = 10;
+    constexpr uint32_t BRUSH_MOTOR_SPEED = 255;
+    constexpr uint32_t BRUSH_RAMP_RATE = 25;
     constexpr uint32_t BRUSH_UPDATE_RATE = 20;
 
     //5inch Blue wheel
@@ -22,9 +22,9 @@ namespace Config
     //Belt
     //Speed 50 is too slow
     //Speed 100
-    constexpr uint32_t VERTICAL_MOTOR_MAX_SPEED = 100;
-    constexpr uint32_t VERTICAL_MOTOR_UP_SPEED = 100;
-    constexpr uint32_t VERTICAL_MOTOR_DW_SPEED = 100;
+    constexpr uint32_t VERTICAL_MOTOR_MAX_SPEED = 255;
+    constexpr uint32_t VERTICAL_MOTOR_UP_SPEED = 255;
+    constexpr uint32_t VERTICAL_MOTOR_DW_SPEED = 255;
     constexpr uint32_t VERTICAL_RAMP_RATE = 25;
     constexpr uint32_t VERTICAL_UPDATE_RATE = 10;
 
@@ -37,7 +37,7 @@ namespace Config
 
     constexpr unsigned long UPDATE_INTERVAL_MS = 2000;  //WHERE do this used?
 
-    constexpr uint8_t PUMP_MOTOR_SPEED = 255;
+    constexpr uint8_t PUMP_MOTOR_SPEED = 100;
     constexpr uint8_t PUMP_RAMP_RATE = 10;
     constexpr unsigned long PUMP_UPDATE_RATE = 20;
 }
