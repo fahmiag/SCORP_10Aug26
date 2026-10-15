@@ -73,6 +73,8 @@ pio device monitor -b 115200
 
 PlatformIO installs the LCD library declared in `platformio.ini`.
 
+Alternatively:  Pull this repository into VS Code.
+
 ## Code Organization
 
 | Location | Purpose |
