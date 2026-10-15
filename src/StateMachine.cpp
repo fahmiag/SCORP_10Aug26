@@ -259,7 +259,7 @@ void StateMachine::ReverseAxis()
         verticalMotor_.SetSpeed(Config::VERTICAL_MOTOR_UP_SPEED);
     }
 
-    //verticalMotor_.SetSpeed(Config::VERTICAL_MOTOR_MAX_SPEED);
+
 
     state_ = State::RUNNING;
 
@@ -335,7 +335,7 @@ void StateMachine::StartMachine()
         verticalMotor_.SetSpeed(Config::VERTICAL_MOTOR_DW_SPEED);
     }
 
-    //verticalMotor_.SetSpeed(Config::VERTICAL_MOTOR_MAX_SPEED);
+
 
     axisMoveStartTime_ = millis();
 }

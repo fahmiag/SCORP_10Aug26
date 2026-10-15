@@ -42,9 +42,7 @@ public:
     enum class FaultReason
     {
         NONE,
-        AXIS_TIMEOUT,
-        TOP_LIMIT_ERROR, //Temporary placeholder
-        BOTTOM_LIMIT_ERROR
+        AXIS_TIMEOUT
     };
 
 
