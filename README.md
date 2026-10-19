@@ -38,8 +38,8 @@ Do not connect 12 V directly to an Arduino input.
 
 - Arduino Uno R3
 - Motor drivers MDD20A From Cytron
-- One vertical axis motors, Cytron IG42-04K
-- Brush motor, Cytron IG42-04K
+- One vertical axis motors, Cytron IG42-60K
+- Brush motor, Cytron IG42-60K
 - DC pum, Seaflo 21 Series DC Diaphragm pump
 - Top and bottom limit switches, Kozuka KZ-8111
 - Start and Stop buttons
