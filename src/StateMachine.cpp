@@ -171,7 +171,7 @@ void StateMachine::HandleRunning()
             }
             // Ramp motor down to zero first
             //verticalMotor_.Stop();
-            DEBUG_PRINTLN("[AXIS1] TOP LIMIT");
+            DEBUG_PRINTLN("[AXIS1] BOTTOM LIMIT");
             StartReverseDelay();
 
             // We will reverse once the motor has stopped

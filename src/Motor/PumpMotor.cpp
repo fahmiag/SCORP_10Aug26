@@ -3,6 +3,7 @@
 
 PumpMotor::PumpMotor(uint8_t pwmPin, uint8_t dirPin)
     : pwmPin_(pwmPin),
+      dirPin_(dirPin),
       initialized_(false),
       enabled_(false),
       selectedSpeed_(Config::PUMP_MOTOR_SPEED),

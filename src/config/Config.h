@@ -22,9 +22,9 @@ namespace Config
     //Belt
     //Speed 50 is too slow
     //Speed 100
-    constexpr uint32_t VERTICAL_MOTOR_UP_SPEED = 255;//255
-    constexpr uint32_t VERTICAL_MOTOR_DW_SPEED = 255;
-    constexpr uint32_t VERTICAL_RAMP_RATE = 25;
+    constexpr uint32_t VERTICAL_MOTOR_UP_SPEED = 150;//255
+    constexpr uint32_t VERTICAL_MOTOR_DW_SPEED = 150;
+    constexpr uint32_t VERTICAL_RAMP_RATE = 10;
     constexpr uint32_t VERTICAL_UPDATE_RATE = 10;
 
     constexpr unsigned long REVERSE_DELAY_MS = 1000;
@@ -33,7 +33,7 @@ namespace Config
     constexpr uint32_t SAVE_INTERVAL_CYCLES = 50;  
 
 
-    constexpr uint8_t PUMP_MOTOR_SPEED = 255;
+    constexpr uint8_t PUMP_MOTOR_SPEED = 150;
     constexpr uint8_t PUMP_RAMP_RATE = 10;
     constexpr unsigned long PUMP_UPDATE_RATE = 20;
 }

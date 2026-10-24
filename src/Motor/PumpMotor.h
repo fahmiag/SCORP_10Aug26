@@ -30,6 +30,7 @@ public:
 
 private:
     uint8_t pwmPin_;
+    uint8_t dirPin_;
 
     bool initialized_;
     bool enabled_;
