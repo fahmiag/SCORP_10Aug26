@@ -28,9 +28,9 @@
  * [x] Save count data in EEPROM
  * [x] Move all configs to Config.h
  * [x] Move all pins to PinMap.h
- * [ ] Send count data to RasPI
- * [ ] Write Debug function
- * [ ] Remove Magic number
+ * [ ] Send count data to RasPI. CANCELLED
+ * [x] Write Debug function
+ * [x] Remove Magic number
  */
 
 #include <Arduino.h>

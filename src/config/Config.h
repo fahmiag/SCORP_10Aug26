@@ -10,7 +10,7 @@ namespace Config
     constexpr uint32_t BUTTON_DEBOUNCE_MS = 50;
     constexpr uint32_t BUTTON_LONG_PRESS_MS = 1000;
 
-    constexpr uint32_t BRUSH_MOTOR_SPEED = 255;
+    constexpr uint32_t BRUSH_MOTOR_SPEED = 150;
     constexpr uint32_t BRUSH_RAMP_RATE = 25;
     constexpr uint32_t BRUSH_UPDATE_RATE = 20;
 
@@ -28,12 +28,12 @@ namespace Config
     constexpr uint32_t VERTICAL_UPDATE_RATE = 10;
 
     constexpr unsigned long REVERSE_DELAY_MS = 1000;
-    constexpr unsigned long AXIS_TIMEOUT_MS = 20000;
+    constexpr unsigned long AXIS_TIMEOUT_MS = 30000;
 
     constexpr uint32_t SAVE_INTERVAL_CYCLES = 50;  
 
 
-    constexpr uint8_t PUMP_MOTOR_SPEED = 150;
+    constexpr uint8_t PUMP_MOTOR_SPEED = 100;
     constexpr uint8_t PUMP_RAMP_RATE = 10;
     constexpr unsigned long PUMP_UPDATE_RATE = 20;
 }

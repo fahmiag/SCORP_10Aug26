@@ -1,9 +1,9 @@
 #pragma once
 
-#define DEBUG_ENABLED 1
-#define DEBUG_STATE   1
-#define DEBUG_MOTOR   1
-#define DEBUG_IO      1
+#define DEBUG_ENABLED 0
+#define DEBUG_STATE   0
+#define DEBUG_MOTOR   0
+#define DEBUG_IO      0
 
 #if DEBUG_ENABLED
 

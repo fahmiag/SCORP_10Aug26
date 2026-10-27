@@ -62,7 +62,7 @@ void App::Begin()
     cycleStorage_.Begin();
 
     // TEMPORARY - reset EEPROM counter
-   // stateMachine_.ResetCycleCount();
+    //stateMachine_.ResetCycleCount();
 
     stateMachine_.Begin();
 
