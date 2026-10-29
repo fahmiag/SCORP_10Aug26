@@ -62,7 +62,9 @@ void App::Begin()
     cycleStorage_.Begin();
 
     // TEMPORARY - reset EEPROM counter
-    //stateMachine_.ResetCycleCount();
+    //stateMachine_.ResetCycleCount();  //uncomment this line to reset the cycle count in EEPROM on startup. 
+                                        //This is useful for testing, but should be removed in production.
+                                        //comment this on final version
 
     stateMachine_.Begin();
 

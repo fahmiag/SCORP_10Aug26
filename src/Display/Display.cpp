@@ -27,7 +27,7 @@ bool Display::Begin()
 
     initialized_ = true;
 
-    PrintLine(0, "SCORP Robot");
+    PrintLine(0, "ABRASION TEST");
 
     return true;
 }
@@ -119,7 +119,7 @@ void Display::Update(
     {
         if (previousState_ != StateMachine::State::ESTOP)
         {
-            PrintLine(0, "SCORP Robot");
+            PrintLine(0, "ABRASION TEST");
             PrintLine(1, "***  E-STOP  ***");
             PrintLine(2, "Contact person ");
             PrintLine(3, " in charge");

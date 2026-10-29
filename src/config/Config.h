@@ -22,8 +22,10 @@ namespace Config
     //Belt
     //Speed 50 is too slow
     //Speed 100
-    constexpr uint32_t VERTICAL_MOTOR_UP_SPEED = 150;//255
+    constexpr uint32_t VERTICAL_MOTOR_UP_SPEED = 150;
     constexpr uint32_t VERTICAL_MOTOR_DW_SPEED = 150;
+    constexpr uint8_t VERTICAL_MOTOR_REDUCED_SPEED = 50;
+    constexpr unsigned long VERTICAL_SPEED_REDUCE_AFTER_MS = 10000;
     constexpr uint32_t VERTICAL_RAMP_RATE = 10;
     constexpr uint32_t VERTICAL_UPDATE_RATE = 10;
 

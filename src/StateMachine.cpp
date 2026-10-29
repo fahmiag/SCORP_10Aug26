@@ -139,6 +139,13 @@ void StateMachine::HandleRunning()
         return;
     }
 
+    // Each start or reversal gets ten seconds at the initial speed.
+    // SetSpeed uses the existing ramp for the transition to reduced speed.
+    if (millis() - axisMoveStartTime_ >= Config::VERTICAL_SPEED_REDUCE_AFTER_MS)
+    {
+        verticalMotor_.SetSpeed(Config::VERTICAL_MOTOR_REDUCED_SPEED);
+    }
+
     // ----------------------------------------------
     // Check axis limits
     // ----------------------------------------------
