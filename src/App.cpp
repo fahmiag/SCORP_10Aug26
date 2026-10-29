@@ -68,12 +68,7 @@ void App::Begin()
 
     stateMachine_.Begin();
 
-    // display_.Begin();
 
-    // display_.PrintLine(0, "SCORP Robot");
-    // display_.PrintLine(1, "State: IDLE");
-
-    // Serial.println("[APP] System ready");
 
     display_.Begin();
 
